@@ -33,6 +33,8 @@ const PageContainer = () => {
 
       </section>
 
+
+      {/* Browse by accomodation type */}
       <section className=' bg-amber-950'>
         <div className='bg-black/80 inset-0 h-full p-20 px-55 text-white'>
           <div className='text-center font-semibold text-4xl mb-10'>
@@ -44,7 +46,37 @@ const PageContainer = () => {
         </div>
       </section>
 
+      {/* top listings */}
+      <section className=' bg-amber-950'>
+        <div className='bg-black/80 inset-0 h-full p-20 px-55 text-white'>
+          <div className='text-center font-semibold text-4xl mb-10'>
+            <h2>Top Listings</h2>
+          </div>
+          <div className='grid grid-cols-3 grid-rows-2 gap-5'>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            <div className='bg-amber-50 h-80 w-80 rounded-xl '>
+              <div className='bg-rose-300 h-60 ' ></div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
 
+      {/* map view and rooms with budgets */}
       <article className='bg-amber-950 grid  grid-cols-[3fr_4fr]'>
         <section>
           <div className='bg-black/80 inset-0 h-full p-20 pl-55 text-white'>

@@ -1,15 +1,13 @@
 import React from 'react'
-import PageContainer from './components/layouts/PageContainer.jsx'
-import Navbar from './components/layouts/Navbar.jsx'
-import Footer from './components/layouts/Footer.jsx'
+import {BrowserRouter} from 'react-router-dom'
+import AppRouter from './routes/AppRouter.jsx'
+
 
 const App = () => {
   return (
-    <div>
-      <Navbar />
-      <PageContainer />
-      <Footer />
-    </div>
+    <>
+      <AppRouter/>
+    </>
   )
 }
 

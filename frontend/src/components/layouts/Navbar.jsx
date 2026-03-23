@@ -24,9 +24,9 @@ const Navbar = () => {
 
       <div className='flex items-center justify-between gap-6'>
         <div className='bg-amber-500 py-1 px-5 rounded-4xl border-3 cursor-pointer font-semibold hover:bg-amber-600 transition-all ease-in-out duration-200'>
-          <h3>Sign Up</h3>
+          <h3>Get Started</h3>
         </div>
-        <button className='bg-gray-600 p-2 rounded-full'>
+        <button className='bg-gray-600 p-2 rounded-full hidden'>
           <FaUser/>
         </button>
       </div>
