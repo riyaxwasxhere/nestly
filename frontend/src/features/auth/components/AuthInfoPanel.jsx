@@ -22,7 +22,7 @@ function AuthInfoPanel() {
   return (
     <div
       style={{ backgroundImage: `url(${bgImage})` }}
-      className="bg-cover bg-center relative flex flex-col w-[45%] h-full"
+      className="bg-cover bg-center  flex flex-col w-[45%] min-h-screen sticky top-0 h-screen"
     >
       <div className="absolute bg-black/80 border-r border-[#462c03] z-10 inset-0"></div>
       <div className="relative z-20 px-16 pt-16">

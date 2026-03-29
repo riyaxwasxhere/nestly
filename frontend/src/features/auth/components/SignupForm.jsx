@@ -10,12 +10,13 @@ import {
 
 function SignupForm() {
   const [activeRole, setActiveRole] = useState("");
+  
   const handleActiveRole = (role) => {
     setActiveRole(role);
   };
 
   return (
-    <div className="flex flex-col items-center flex-1 h-full py-16">
+    <div className="flex flex-col items-center flex-1 h-screen py-16 overflow-y-auto">
       <div className="w-[50%]">
         <div>
           <h1
@@ -46,7 +47,7 @@ function SignupForm() {
 
         <div>
           <div>
-            <p className="uppercase text-xs font-semibold mb-3 text-[#f0e3c77c]">
+            <p className="uppercase text-xs font-semibold mb-1 text-[#f0e3c77c]">
               I am a
             </p>
             <div className="grid grid-cols-2 gap-2">
@@ -83,7 +84,7 @@ function SignupForm() {
 
           <div className="text-[#f0e3c77c]">
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase">first name</p>
+              <label className="mb-3 text-xs font-semibold uppercase">first name</label>
               <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
                 <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
                 <input
@@ -94,7 +95,7 @@ function SignupForm() {
               </div>
             </div>
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase">last name</p>
+              <label className="mb-3 text-xs font-semibold uppercase">last name</label>
               <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
                 <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
                 <input
@@ -106,9 +107,9 @@ function SignupForm() {
             </div>
           </div>
           <div className="text-[#f0e3c77c]">
-            <p className="mb-3 text-xs font-semibold uppercase">
+            <label className="mb-3 text-xs font-semibold uppercase">
               Email address
-            </p>
+            </label>
             <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
@@ -122,7 +123,7 @@ function SignupForm() {
             </div>
           </div>
           <div className="text-[#f0e3c77c]">
-            <p className="mb-3 text-xs font-semibold uppercase">phone number</p>
+            <label className="mb-3 text-xs font-semibold uppercase">phone number</label>
             <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
@@ -137,7 +138,7 @@ function SignupForm() {
           </div>
 
           <div className="text-[#f0e3c77c]">
-            <p className="mb-3 text-xs font-semibold uppercase">Password</p>
+            <label className="mb-3 text-xs font-semibold uppercase">Password</label>
             <div className="flex  relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-2">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input

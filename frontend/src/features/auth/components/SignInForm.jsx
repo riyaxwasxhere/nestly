@@ -1,8 +1,46 @@
-import React from "react";
-import { FaArrowRight, FaEnvelope, FaGoogle, FaRegEye } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FaArrowRight,
+  FaEnvelope,
+  FaGoogle,
+  FaRegEye,
+  FaRegEyeSlash
+} from "react-icons/fa";
 import { ArrowRight } from "lucide-react";
+import { serverUrl } from "../../../App";
+import axios from 'axios'
 
 function SignInForm() {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState("");
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/auth/signin`,
+        {
+          email,
+          pass
+        },
+        { withCredentials: true }
+      );
+      console.log("Sign in successful:", response.data);
+      setError(false);
+      setLoading(false);
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "An error occurred during sign in"
+      );
+      console.log("Error during sign in:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center flex-1 h-full py-16">
       <div className="w-[50%] ">
@@ -17,7 +55,7 @@ function SignInForm() {
             Sign in to find your perfect stay near campus
           </p>
         </div>
-        <button className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center ">
+        <button className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center cursor-pointer">
           <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm inset-0 rounded-xl "></div>
           <span className="z-9">
             <FaGoogle />
@@ -34,12 +72,18 @@ function SignInForm() {
 
         <div className="text-[#f0e3c77c]">
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase">
+            <label
+              htmlFor="email"
+              className="mb-3 text-xs font-semibold uppercase"
+            >
               Email address
-            </p>
+            </label>
             <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="flex justify-between flex-1 text-sm outline-0 z-9"
                 type="email"
                 placeholder="you@college.edu"
@@ -50,26 +94,46 @@ function SignInForm() {
             </div>
           </div>
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase">Password</p>
+            <label
+              htmlFor="pass"
+              className="mb-3 text-xs font-semibold uppercase"
+            >
+              Password
+            </label>
             <div className="flex  relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-2">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
+                id="pass"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
                 className="flex justify-between flex-1 text-sm outline-0 z-9"
-                type="password"
+                type={showPass ? "text" : "password"}
                 placeholder="Enter your password"
               />
-              <span className="text-sm z-9">
-                <FaRegEye />
+              <span
+                className="text-sm z-9"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {!showPass ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
           </div>
           <p className="text-xs font-semibold text-[#F5A623] flex justify-end">
             Forgot Password?
           </p>
-          <button className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:-translate-y-1 my-5 transition-all duration-400 w-full justify-center bg-[#F5A623] shadow-[0_0_25px_rgba(255,255,255,0.25)] font-semibold text-black ">
+          <button
+            onClick={() => handleSignIn()}
+            disabled={loading}
+            className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:-translate-y-1 my-5 transition-all duration-400 w-full justify-center bg-[#F5A623] shadow-[0_0_25px_rgba(255,255,255,0.25)] font-semibold text-black "
+          >
             Sign In to Nestly
             <ArrowRight size={20} strokeWidth={1.5} />
           </button>
+          {error && (
+            <p className="mb-2 -mt-4 text-sm text-center text-red-500">
+              {error}
+            </p>
+          )}
           <pre className="flex justify-center font-sans text-xs">
             New to Nestly?{" "}
             <span className="text-[#F5A623] font-bold">Create an account</span>
