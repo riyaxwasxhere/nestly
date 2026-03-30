@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard";
 
 function StudentLayout() {
   return (
-    <div className="bg-[#0E0A07] text-white flex ">
+    <div className="bg-[#0E0A07] text-[#F0E8D8] flex ">
       <div className="flex h-screen overflow-hidden">
         <Navbar />
       </div>

@@ -55,7 +55,7 @@ function Navbar() {
   ]
 
   return (
-    <div className="flex flex-col w-60 p-2 text-white border-r border-[#5a4626] h-screen bg-[#271b0975]">
+    <div className="flex flex-col w-60 p-2 text-white border-r border-[#2c1a00b3] h-screen bg-[#2517035c]">
       <div className="flex items-center h-16 px-3 ">
         <Logo />
       </div>
