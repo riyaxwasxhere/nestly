@@ -16,7 +16,7 @@ function SignupForm() {
   };
 
   return (
-    <div className="flex flex-col items-center flex-1 h-screen py-16 overflow-y-auto">
+    <div className="flex flex-col items-center flex-1 h-screen py-16 overflow-y-auto no-scrollbar">
       <div className="w-[50%]">
         <div>
           <h1

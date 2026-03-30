@@ -42,7 +42,7 @@ function SignInForm() {
   };
 
   return (
-    <div className="flex flex-col items-center flex-1 h-full py-16">
+    <div className="flex flex-col items-center flex-1 h-full py-16 no-scrollbar">
       <div className="w-[50%] ">
         <div>
           <h1

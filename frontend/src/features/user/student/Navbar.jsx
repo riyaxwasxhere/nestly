@@ -59,7 +59,7 @@ function Navbar() {
       <div className="flex items-center h-16 px-3 ">
         <Logo />
       </div>
-      <div className="flex flex-col flex-1 overflow-y-auto ">
+      <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar ">
         <div className="mb-1">
           <h2 className="text-[#6A5C48] uppercase py-3 text-xs font-semibold px-3 tracking-widest">
             Main

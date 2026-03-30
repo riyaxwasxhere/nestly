@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 function ListingCard() {
+  const [saved, setSaved] = useState(false);
   return (
     <div className="bg-[#261A0A] rounded-xl cursor-pointer ">
       <div className="relative">
@@ -13,8 +14,7 @@ function ListingCard() {
         >
           <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f]absolute">
             <span className="px-2 bg-[#362704cf] rounded-4xl border border-[#8d8269]">4.8 (120 reviews)</span>
-            {/* <span>🤍</span> */}
-            <span>❤️</span>
+            <span className="p-1 text-[16px] border rounded-full bg-[#f5236d62] border-rose-500" onClick={()=>setSaved(!saved)}>{saved ? "❤️" : "🤍"}</span>
           </div>
         </div>
       </div>

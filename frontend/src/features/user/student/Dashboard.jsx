@@ -4,7 +4,7 @@ import ListingCard from "./ListingCard";
 function Dashboard() {
   
   return (
-    <div className="h-screen overflow-y-auto ">
+    <div className="h-screen overflow-y-auto no-scrollbar">
       <Welcome />
       <QuickSearch />
       <div className="px-6">
