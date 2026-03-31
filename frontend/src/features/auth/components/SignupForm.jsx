@@ -5,12 +5,21 @@ import {
   FaEnvelope,
   FaGoogle,
   FaMobile,
-  FaRegEye
+  FaRegEye,
+  FaRegEyeSlash
 } from "react-icons/fa";
 
 function SignupForm() {
   const [activeRole, setActiveRole] = useState("");
-  
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+
   const handleActiveRole = (role) => {
     setActiveRole(role);
   };
@@ -84,10 +93,14 @@ function SignupForm() {
 
           <div className="text-[#f0e3c77c]">
             <div>
-              <label className="mb-3 text-xs font-semibold uppercase">first name</label>
+              <label className="mb-3 text-xs font-semibold uppercase">
+                first name
+              </label>
               <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
                 <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
                 <input
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="flex justify-between flex-1 text-sm outline-0 z-9"
                   type="text"
                   placeholder="Aarav"
@@ -95,10 +108,14 @@ function SignupForm() {
               </div>
             </div>
             <div>
-              <label className="mb-3 text-xs font-semibold uppercase">last name</label>
+              <label className="mb-3 text-xs font-semibold uppercase">
+                last name
+              </label>
               <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
                 <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
                 <input
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="flex justify-between flex-1 text-sm outline-0 z-9"
                   type="text"
                   placeholder="Sharma"
@@ -113,6 +130,8 @@ function SignupForm() {
             <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="flex justify-between flex-1 text-sm outline-0 z-9"
                 type="email"
                 placeholder="you@college.edu"
@@ -123,12 +142,16 @@ function SignupForm() {
             </div>
           </div>
           <div className="text-[#f0e3c77c]">
-            <label className="mb-3 text-xs font-semibold uppercase">phone number</label>
+            <label className="mb-3 text-xs font-semibold uppercase">
+              phone number
+            </label>
             <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="flex justify-between flex-1 text-sm z-9 outline-0"
-                type="phone"
+                type="text"
                 placeholder="+91 98323 43733"
               />
               <span className="text-sm z-9">
@@ -138,31 +161,39 @@ function SignupForm() {
           </div>
 
           <div className="text-[#f0e3c77c]">
-            <label className="mb-3 text-xs font-semibold uppercase">Password</label>
+            <label className="mb-3 text-xs font-semibold uppercase">
+              Password
+            </label>
             <div className="flex  relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-2">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="flex justify-between flex-1 text-sm outline-0 z-9"
-                type="password"
+                type={showPassword? "text": "password"}
                 placeholder="Enter your password"
               />
-              <span className="text-sm z-9">
-                <FaRegEye />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-sm z-9"
+              >
+                {showPassword? <FaRegEyeSlash/> : <FaRegEye />}
               </span>
             </div>
           </div>
           <label className="flex gap-2 my-5 cursor-pointer">
             <input type="checkbox" className="w-4 h-4 accent-amber-500" />
             <p className="text-xs text-[#f0e3c77c]">
-              I agree to the <span className="text-[#F5A623]">Terms & Conditions</span> and <span className="text-[#F5A623]">Privacy Policy</span> of Nestly
+              I agree to the
+              <span className="text-[#F5A623]">Terms & Conditions</span> and{" "}
+              <span className="text-[#F5A623]">Privacy Policy</span> of Nestly
             </p>
           </label>
           <button className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:-translate-y-1 my-5 transition-all duration-400 w-full justify-center bg-[#F5A623] shadow-[0_0_25px_rgba(255,255,255,0.25)] font-semibold text-black cursor-pointer ">
-            Create My Account{" "}
-            <ArrowRight size={20} strokeWidth={1.5} />
+            Create My Account <ArrowRight size={20} strokeWidth={1.5} />
           </button>
           <pre className="flex justify-center text-xs font-sans text-[#f0e3c77c]">
-            Already have an account?  
+            Already have an account?
             <span className="text-[#F5A623] font-bold"> Sign in</span>
           </pre>
         </div>

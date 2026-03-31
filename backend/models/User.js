@@ -13,6 +13,25 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    mobile: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ["student", "owner"],
+        required: true
+    },
+    resetOtp: {
+        type: String,
+    },
+    isOtpVerified:{
+        type: Boolean,
+        default: false
+    },
+    otpExpiry: {
+        type: Date,
     }
 },{ timestamps: true })
 

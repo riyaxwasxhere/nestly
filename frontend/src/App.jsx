@@ -1,13 +1,19 @@
 import React from 'react'
-import {BrowserRouter} from 'react-router-dom'
 import AppRouter from './routes/AppRouter.jsx'
+import {Provider} from 'react-redux'
+import {store} from './redux/store.js'
+import { BrowserRouter } from 'react-router-dom'
 
-export const serverUrl = "http://localhost:5173"
+export const serverUrl = "http://localhost:8000"
+
 const App = () => {
   return (
-    <>
-      <AppRouter/>
-    </>
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppRouter/>
+      </BrowserRouter>
+      
+    </Provider>
   )
 }
 

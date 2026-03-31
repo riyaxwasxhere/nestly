@@ -15,7 +15,7 @@ function SignInForm() {
   const [pass, setPass] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -29,7 +29,7 @@ function SignInForm() {
         { withCredentials: true }
       );
       console.log("Sign in successful:", response.data);
-      setError(false);
+      setError("");
       setLoading(false);
     } catch (error) {
       setError(
