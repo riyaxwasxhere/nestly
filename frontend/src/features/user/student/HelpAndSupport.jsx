@@ -7,9 +7,6 @@ function HelpAndSupport() {
   return (
     <div>
       <div>
-        <Header header="Help & Support" />
-      </div>
-      <div>
         <h2>💡 Help & Support</h2>
         <div>
             <HelpCard icon="💬" heading="Live Chat Support" desc="Chat with our support team. Available Mon-Sat, 9 AM-7 PM." btn="Start Chat" />

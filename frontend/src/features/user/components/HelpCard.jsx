@@ -1,7 +1,6 @@
 import React from 'react'
 
-function HelpCard(props) {
-    const {icon, heading, desc, btn} = props
+function HelpCard({icon, heading, desc, btn}) {
   return (
     <div>
       <p>{icon}</p>

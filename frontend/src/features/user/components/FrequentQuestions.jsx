@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FrequentQuestions(question, answer) {
+function FrequentQuestions({question, answer}) {
   return (
     <div>
       <div>
