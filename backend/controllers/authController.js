@@ -4,8 +4,8 @@ import bcrypt from "bcryptjs"
 
 export const signup = async (req, res) => {
     try{
-        const { fullname, email, password } = req.body
-        if(!fullname || !email || !password){
+        const { fullname, email, password, role, mobile } = req.body
+        if(!fullname || !email || !password || !role || !mobile){
             return res.status(400).json({ message: "All fields are required" })
         }
         const existingUser = await User.findOne({ email })
@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
         }
         
         const hashedPassword = await bcrypt.hash(password,10)
-        const newUser = await new User({
+        const newUser = new User({
             fullname,
             email,
             password: hashedPassword
@@ -35,7 +35,7 @@ export const signup = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
+export const signin = async (req, res) => {
     try{
         const { email, password } = req.body
         if(!email || !password){
@@ -56,7 +56,7 @@ export const login = async (req, res) => {
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000 
         })
-        res.status(200).json({ message: "Login successful" })
+        res.status(200).json({ message: "Signin successful" })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }

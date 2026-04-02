@@ -8,14 +8,23 @@ import {
 } from "react-icons/fa";
 import { ArrowRight } from "lucide-react";
 import { serverUrl } from "../../../App";
-import axios from 'axios'
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setView } from "../../../redux/authSlice";
+import { useNavigate } from "react-router-dom";
+import { setUserData } from "../../../redux/userSlice";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../../firebase";
 
 function SignInForm() {
   const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -24,10 +33,11 @@ function SignInForm() {
         `${serverUrl}/api/auth/signin`,
         {
           email,
-          pass
+          password
         },
         { withCredentials: true }
       );
+      dispatch(setUserData(response.data));
       console.log("Sign in successful:", response.data);
       setError("");
       setLoading(false);
@@ -36,6 +46,32 @@ function SignInForm() {
         error.response?.data?.message || "An error occurred during sign in"
       );
       console.log("Error during sign in:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/auth/signin/google-auth`,
+        {
+          email: result.user.email
+        },
+        { withCredentials: true }
+      );
+      dispatch(setUserData(response.data));
+      console.log("Google authentication successful:", response.data);
+      setError("");
+      setLoading(false);
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+          "An error occurred during Google authentication"
+      );
     } finally {
       setLoading(false);
     }
@@ -55,7 +91,10 @@ function SignInForm() {
             Sign in to find your perfect stay near campus
           </p>
         </div>
-        <button className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center cursor-pointer">
+        <button
+          onClick={() => handleGoogleAuth()}
+          className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center cursor-pointer"
+        >
           <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm inset-0 rounded-xl "></div>
           <span className="z-9">
             <FaGoogle />
@@ -95,7 +134,7 @@ function SignInForm() {
           </div>
           <div>
             <label
-              htmlFor="pass"
+              htmlFor="password"
               className="mb-3 text-xs font-semibold uppercase"
             >
               Password
@@ -103,22 +142,25 @@ function SignInForm() {
             <div className="flex  relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-2">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
-                id="pass"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="flex justify-between flex-1 text-sm outline-0 z-9"
                 type={showPass ? "text" : "password"}
                 placeholder="Enter your password"
               />
               <span
-                className="text-sm z-9"
+                className="text-sm cursor-pointer z-9"
                 onClick={() => setShowPass(!showPass)}
               >
                 {!showPass ? <FaRegEye /> : <FaRegEyeSlash />}
               </span>
             </div>
           </div>
-          <p className="text-xs font-semibold text-[#F5A623] flex justify-end">
+          <p
+            onClick={() => navigate("/forgot-password")}
+            className="text-xs font-semibold text-[#F5A623] flex justify-end cursor-pointer"
+          >
             Forgot Password?
           </p>
           <button
@@ -136,7 +178,12 @@ function SignInForm() {
           )}
           <pre className="flex justify-center font-sans text-xs">
             New to Nestly?{" "}
-            <span className="text-[#F5A623] font-bold">Create an account</span>
+            <span
+              onClick={() => dispatch(setView("signup"))}
+              className="text-[#F5A623] font-bold cursor-pointer"
+            >
+              Create an account
+            </span>
           </pre>
         </div>
       </div>
