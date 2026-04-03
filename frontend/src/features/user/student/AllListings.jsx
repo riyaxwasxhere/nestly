@@ -5,13 +5,15 @@ import ListingCard from './ListingCard'
 function AllListings() {
   return (
     <div>
-      <QuickSearch/>
-      <div>
-        <div>
-            <h2>🏠 All Listings</h2>
-            <span>24 results found</span>
+      <div className='px-3'><QuickSearch/></div>
+      <div className='px-10'>
+        <div className='flex items-center justify-between mb-4'>
+            <h2 style={{fontFamily:  "Playfair Display, serif"}} className='text-lg font-bold text-[#F0E8D8]'>🏠 All Listings</h2>
+            <span className='text-sm text-[#867a5f] '>24 results found</span>
         </div>
-        <div>
+        <div className='grid grid-cols-4 gap-4'>
+            <ListingCard/>
+            <ListingCard/>
             <ListingCard/>
             <ListingCard/>
             <ListingCard/>

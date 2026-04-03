@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function ListingCard() {
   const [saved, setSaved] = useState(false);
   return (
-    <div className="bg-[#261A0A] rounded-xl cursor-pointer ">
+    <div className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
       <div className="relative">
         <div
           className="h-40 bg-center bg-cover rounded-t-xl"

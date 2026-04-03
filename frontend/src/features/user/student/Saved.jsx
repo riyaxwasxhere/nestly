@@ -4,12 +4,12 @@ import SavedCard from './SavedCard'
 
 function Saved() {
   return (
-    <div>
-      <div>
-        <h2>❤️ Saved Properties</h2>
-        <span>5 properties saved</span>
+    <div className='px-10 py-8'>
+      <div className='flex items-center justify-between'>
+        <h2 style={{fontFamily: "Playfair Display, serif"}} className='mb-4 text-lg font-bold'>❤️ Saved Properties</h2>
+        <span className='text-xs text-[#867a5f]'>5 properties saved</span>
       </div>
-      <div>
+      <div className='flex flex-col gap-4'>
         <SavedCard/>
         <SavedCard/>
         <SavedCard/>
