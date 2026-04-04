@@ -52,27 +52,29 @@ function SignInForm() {
   };
 
   const handleGoogleAuth = async () => {
-    console.log("clicked google")
+    console.log("clicked google");
     setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
       const response = await signInWithPopup(auth, provider);
+            console.log("Firebase success: ", response.user);
+
       const result = await axios.post(
         `${serverUrl}/api/auth/signin/google-auth`,
         {
           email: response.user.email,
-          password: response.user.uid,
+          password: response.user.uid
         },
         { withCredentials: true }
       );
-      dispatch(setUserData(response.data));
-      console.log("Google authentication successful:", response.data);
+            console.log("Google authentication successful:", result.data);
+dispatch(setUserData(result.data));
       setError("");
       setLoading(false);
     } catch (error) {
-      console.log("ERROR: ",error)
+      console.log("ERROR: ", error);
       setError(
-        error.response?.data?.message ||
+        error.message ||
           "An error occurred during Google authentication"
       );
     } finally {

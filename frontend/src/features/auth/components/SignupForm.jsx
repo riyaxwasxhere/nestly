@@ -125,7 +125,7 @@ function SignupForm() {
 
       setError("");
     } catch (error) {
-      console.log("ERROR:",error)
+      console.log("ERROR:", error);
       setError(
         error.message || "An error occurred during Google authentication"
       );
