@@ -4,7 +4,7 @@ import ListingCard from './ListingCard'
 
 function AllListings() {
   return (
-    <div>
+    <div className='h-screen overflow-y-auto no-scrollbar'>
       <div className='px-3'><QuickSearch/></div>
       <div className='px-10'>
         <div className='flex items-center justify-between mb-4'>

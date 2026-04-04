@@ -15,6 +15,7 @@ import { serverUrl } from "../../../App";
 import { setUserData } from "../../../redux/userSlice";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../../firebase";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function SignupForm() {
   const [role, setRole] = useState("");
@@ -95,32 +96,38 @@ function SignupForm() {
   };
 
   const handleGoogleAuth = async () => {
+    console.log("Clicked google");
     if (!mobile || !role) {
-      return setError(
+      alert(
         "Please select your role and enter your mobile number to continue with Google authentication"
       );
+      return;
     }
     setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
       const response = await signInWithPopup(auth, provider);
+      console.log("Firebase success: ", response.user);
+
       const result = await axios.post(
         `${serverUrl}/api/auth/signup/google-auth`,
         {
-          fullName: response.user.displayName,
+          fullname: response.user.displayName,
           email: response.user.email,
+          password: response.user.uid,
           mobile,
           role
         },
         { withCredentials: true }
       );
-      dispatch(setUserData(result.data));
       console.log("Google authentication successful:", result.data);
+      dispatch(setUserData(result.data));
+
       setError("");
     } catch (error) {
+      console.log("ERROR:",error)
       setError(
-        error.response?.data?.message ||
-          "An error occurred during Google authentication"
+        error.message || "An error occurred during Google authentication"
       );
     } finally {
       setLoading(false);
@@ -146,11 +153,10 @@ function SignupForm() {
               ? 2
               : level === 4
                 ? 3
-              
                 : 4;
     return (
       <div className="flex gap-1 mb-5">
-        {[1,2,3,4].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
             className="flex-1 h-1 transition-all duration-300 rounded-full"
@@ -339,12 +345,16 @@ function SignupForm() {
                   { key: "uppercase", label: "Uppercase" },
                   { key: "lowercase", label: "Lowercase" },
                   { key: "number", label: "Number" },
-                  { key: "specialChar", label: "Special char" },
+                  { key: "specialChar", label: "Special char" }
                 ].map(({ key, label }) => (
                   <span
                     key={key}
                     className="text-xs"
-                    style={{ color: passwordStrength.checks[key] ? "#22c55e" : "#ef4444" }}
+                    style={{
+                      color: passwordStrength.checks[key]
+                        ? "#22c55e"
+                        : "#ef4444"
+                    }}
                   >
                     {passwordStrength.checks[key] ? "✓" : "✗"} {label}
                   </span>

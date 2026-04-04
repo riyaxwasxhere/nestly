@@ -52,14 +52,16 @@ function SignInForm() {
   };
 
   const handleGoogleAuth = async () => {
+    console.log("clicked google")
     setLoading(true);
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
     try {
-      const response = await axios.post(
+      const response = await signInWithPopup(auth, provider);
+      const result = await axios.post(
         `${serverUrl}/api/auth/signin/google-auth`,
         {
-          email: result.user.email
+          email: response.user.email,
+          password: response.user.uid,
         },
         { withCredentials: true }
       );
@@ -68,6 +70,7 @@ function SignInForm() {
       setError("");
       setLoading(false);
     } catch (error) {
+      console.log("ERROR: ",error)
       setError(
         error.response?.data?.message ||
           "An error occurred during Google authentication"

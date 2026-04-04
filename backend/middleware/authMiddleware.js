@@ -1,4 +1,6 @@
-const isAuth = async (req, res, next) => {
+import jwt from "jsonwebtoken";
+
+export const isAuth = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -9,7 +11,7 @@ const isAuth = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
     console.log("Decoded token:", decoded);
-    req.userId = decoded.userId;
+    req.userId = decoded.id;
     next();
   } catch (error) {
     console.error("Error verifying token:", error);

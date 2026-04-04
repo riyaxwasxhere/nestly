@@ -17,7 +17,9 @@ export const signup = async (req, res) => {
         const newUser = new User({
             fullname,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            mobile,
+            role
         })
 
         await newUser.save()
@@ -70,6 +72,60 @@ export const logout = async (req, res) => {
             sameSite: "strict"
         })
         res.status(200).json({ message: "Logout successful" })
+    }catch(error){
+        res.status(500).json({ message: "Internal Server Error", error: error.message })
+    }
+}
+
+export const googleSignup = async (req,res) => {
+    try{
+        const { fullname, email, role, mobile, password } = req.body
+        if(!fullname || !email || !role || !mobile || !password){
+            return res.status(400).json({ message: "All fields are required" })
+        }
+        let user = await User.findOne({ email })
+        if(!user){
+            user = new User({
+                fullname,
+                email,
+                role,
+                mobile,
+                password: await bcrypt.hash(password,10)
+            })
+            await user.save()
+        }
+        const token = generateToken(user)
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000 
+        })
+        res.status(200).json({ message: "Google authentication successful" })
+    }catch(error){
+        res.status(500).json({ message: "Internal Server Error", error: error.message })
+    }
+}
+
+export const googleSignin = async (req,res) => {
+    try{
+        const {email,password} = req.body
+        let user = await User.findOne({ email })
+        if(!user){
+            return res.status(400).json({ message: "User not found" })
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if(!isPasswordValid){
+            return res.status(400).json({ message: "Invalid credentials" })
+        }
+        const token = generateToken(user)
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000 
+        })
+        res.status(200).json({ message: "Google authentication successful" })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }

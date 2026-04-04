@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dbConnect from './config/db.js'
 import authRouter from './routes/authRoutes.js'
+import userRouter from './routes/userRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -19,10 +20,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.use('/api/auth', authRouter)
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/api/user', userRouter)
 
 app.listen(port, () => {
     dbConnect()
