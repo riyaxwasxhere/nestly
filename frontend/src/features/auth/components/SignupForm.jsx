@@ -16,6 +16,7 @@ import { setUserData } from "../../../redux/userSlice";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../../firebase";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
   const [role, setRole] = useState("");
@@ -29,6 +30,7 @@ function SignupForm() {
   const [fieldErrors, setFieldErrors] = useState({});
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getPasswordCheck = (pwd) => {
     if (!pwd) return null;
@@ -51,8 +53,8 @@ function SignupForm() {
     if (!role) errors.role = "Please select a role";
     if (!fullName.trim()) errors.fullName = "Full name is required";
     if (!email.trim()) errors.email = "Email address is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]$/.test(email))
-      errors.email = "Please enter a valid email address";
+    // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]$/.test(email))
+    //   errors.email = "Please enter a valid email address";
     if (!mobile.trim()) errors.mobile = "Mobile number is required";
     else if (!/^\+?[0-9\s]{10,15}$/.test(mobile))
       errors.mobile = "Please enter a valid mobile number";
@@ -75,7 +77,7 @@ function SignupForm() {
       const response = await axios.post(
         `${serverUrl}/api/auth/signup`,
         {
-          fullName,
+          fullname: fullName,
           email,
           mobile,
           password,
@@ -84,9 +86,15 @@ function SignupForm() {
         { withCredentials: true }
       );
       dispatch(setUserData(response.data));
+      if(response.data.user.role === "owner"){
+        navigate("/owner/dashboard")
+      }else{
+        navigate("/student/dashboard")
+      }
       setError("");
       setLoading(false);
     } catch (error) {
+      console.log("ERROR: ",error)
       setError(
         error.response?.data?.message || "An error occurred during sign up"
       );
@@ -122,7 +130,11 @@ function SignupForm() {
       );
       console.log("Google authentication successful:", result.data);
       dispatch(setUserData(result.data));
-
+      if (result.data.user.role === "owner") {
+        navigate("/owner/dashboard");
+      } else {
+        navigate("/student/dashboard");
+      }
       setError("");
     } catch (error) {
       console.log("ERROR:", error);

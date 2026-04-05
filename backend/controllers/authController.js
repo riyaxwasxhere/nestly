@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000 
         })
 
-        res.status(201).json({ message: "User registered successfully" })
+        res.status(201).json({ message: "User registered successfully", user: newUser })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }
@@ -58,7 +58,7 @@ export const signin = async (req, res) => {
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000 
         })
-        res.status(200).json({ message: "Signin successful" })
+        res.status(200).json({ message: "Signin successful", user })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }
@@ -101,7 +101,7 @@ export const googleSignup = async (req,res) => {
             sameSite: "lax",
             maxAge: 24 * 60 * 60 * 1000 
         })
-        res.status(200).json({ message: "Google authentication successful" })
+        res.status(200).json({ message: "Google signup successful", user })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }
@@ -125,7 +125,7 @@ export const googleSignin = async (req,res) => {
             sameSite: "lax",
             maxAge: 24 * 60 * 60 * 1000 
         })
-        res.status(200).json({ message: "Google authentication successful" })
+        res.status(200).json({ message: "Google signin successful", user })
     }catch(error){
         res.status(500).json({ message: "Internal Server Error", error: error.message })
     }

@@ -38,6 +38,11 @@ function SignInForm() {
         { withCredentials: true }
       );
       dispatch(setUserData(response.data));
+      if(response.data.user.role === "owner"){
+        navigate("/owner/dashboard")
+      }else{
+        navigate("/student/dashboard")
+      }
       console.log("Sign in successful:", response.data);
       setError("");
       setLoading(false);
@@ -57,7 +62,7 @@ function SignInForm() {
     const provider = new GoogleAuthProvider();
     try {
       const response = await signInWithPopup(auth, provider);
-            console.log("Firebase success: ", response.user);
+      console.log("Firebase success: ", response.user);
 
       const result = await axios.post(
         `${serverUrl}/api/auth/signin/google-auth`,
@@ -67,15 +72,19 @@ function SignInForm() {
         },
         { withCredentials: true }
       );
-            console.log("Google authentication successful:", result.data);
-dispatch(setUserData(result.data));
+      console.log("Google authentication successful:", result.data);
+      dispatch(setUserData(result.data));
+      if(result.data.user.role === "owner"){
+        navigate("/owner/dashboard")
+      }else{
+        navigate("/student/dashboard")
+      }
       setError("");
       setLoading(false);
     } catch (error) {
       console.log("ERROR: ", error);
       setError(
-        error.message ||
-          "An error occurred during Google authentication"
+        error.message || "An error occurred during Google authentication"
       );
     } finally {
       setLoading(false);
