@@ -37,7 +37,7 @@ function SignInForm() {
         },
         { withCredentials: true }
       );
-      dispatch(setUserData(response.data));
+      dispatch(setUserData(response.data.user));
       if(response.data.user.role === "owner"){
         navigate("/owner/dashboard")
       }else{
@@ -172,7 +172,7 @@ function SignInForm() {
             </div>
           </div>
           <p
-            onClick={() => navigate("/forgot-password")}
+            onClick={() => navigate("/auth/forgot-password")}
             className="text-xs font-semibold text-[#F5A623] flex justify-end cursor-pointer"
           >
             Forgot Password?

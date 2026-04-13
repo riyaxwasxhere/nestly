@@ -8,9 +8,9 @@ function ProtectedRoutes({ children , allowedRole }) {
     return <Navigate to="/auth" />
   }
   if(allowedRole && user.role !== allowedRole){
-    if(user.role === "owner"){
+    if(user?.role === "owner"){
       return <Navigate to="/owner/dashboard" />
-    } else if(user.role === "student"){
+    } else if(user?.role === "student"){
       return <Navigate to="/student/dashboard" />
     }
   }
