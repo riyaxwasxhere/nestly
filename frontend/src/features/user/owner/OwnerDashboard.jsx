@@ -3,11 +3,14 @@ import Welcome from "../components/Welcome";
 import ListingCard from "./ListingCard";
 import axios from "axios";
 import { serverUrl } from "../../../App";
+import { useDispatch } from "react-redux";
+import { setOwnerView } from "../../../redux/ownerSlice";
 
 function OwnerDashboard() {
   const [listings, setListings] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch()
+  
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -30,7 +33,7 @@ function OwnerDashboard() {
 
   return (
     <div className="h-screen overflow-y-auto no-scrollbar">
-      <Welcome />
+    <Welcome listingsCount={listings.length} />
       <div className="px-6">
         <div className="flex items-center justify-between mb-4">
           <h2
@@ -39,7 +42,11 @@ function OwnerDashboard() {
           >
             ⭐ My Listings
           </h2>
-          <button className="p-2 px-3 text-xs border rounded-full hover:text-[#F5A623] transition-all duration-200 cursor-pointer font-medium bg-[#342310]/20 hover:scale-102">
+          <button
+          onClick={()=>{
+            dispatch(setOwnerView("My Listings"))
+          }}
+           className="p-2 px-3 text-xs border rounded-full hover:text-[#F5A623] transition-all duration-200 cursor-pointer font-medium bg-[#342310]/20 hover:scale-102">
             See All→
           </button>
         </div>
@@ -50,7 +57,9 @@ function OwnerDashboard() {
             <div className="flex flex-col items-center justify-center py-16 border border-dashed border-[#3d2b0f] rounded-2xl">
               <p className="text-[#5a4626] text-sm mb-4">No listings yet</p>
               <button
-                
+                onClick={()=>{
+                  dispatch(setOwnerView("Add Listing"))
+                }}
                 className="bg-[#F5A623] text-black font-bold rounded-xl px-6 py-2 text-sm"
               >
                 + Add your first listing

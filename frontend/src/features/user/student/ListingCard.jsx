@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
-function ListingCard() {
+function ListingCard({ listing }) {
   const [saved, setSaved] = useState(false);
+  if (!listing) {
+    return null;
+  }
   return (
     <div className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
       <div className="relative">
@@ -9,21 +12,39 @@ function ListingCard() {
           className="h-40 bg-center bg-cover rounded-t-xl"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70')"
+              listing.photos?.length > 0
+                ? `url('${listing.photos[0]}')`
+                : "url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70')"
           }}
         >
           <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f]absolute">
-            <span className="px-2 bg-[#362704cf] rounded-4xl border border-[#8d8269]">4.8 (120 reviews)</span>
-            <span className="p-1 text-[16px] border rounded-full bg-[#f5236d62] border-rose-500" onClick={()=>setSaved(!saved)}>{saved ? "❤️" : "🤍"}</span>
+            <span className="px-2 bg-[#362704cf] rounded-4xl border border-[#8d8269]">
+              {listing.averageRating > 0
+                ? `⭐ ${listing.averageRating} (${listing.totalReviews} reviews)`
+                : "No reviews yet"}
+            </span>
+            <span
+              className="p-1 text-[16px] border rounded-full bg-[#f5236d62] border-rose-500"
+              onClick={() => setSaved(!saved)}
+            >
+              {saved ? "❤️" : "🤍"}
+            </span>
           </div>
         </div>
       </div>
       <div className="flex flex-col px-4 py-2">
-        <h3 className="text-sm font-semibold">Sunrise PG — Single Room</h3>
-        <p className="text-xs text-[#867a5f] font-medium">📍Malviya Nagar, 400m from SIT</p>
+        <h3 className="text-sm font-semibold">{listing.title}</h3>
+        <p className="text-xs text-[#867a5f] font-medium">
+          📍{listing.address?.locality}, {listing.address?.city}
+        </p>
         <div className="flex items-center justify-between my-2">
-          <p className="text-xs text-[#867a5f]"><span className="text-[#F5A623] font-bold text-[16px]">₹5,500</span>/month</p>
-          <p className="font-mono text-sm ">Girls PG</p>
+          <p className="text-xs text-[#867a5f]">
+            <span className="text-[#F5A623] font-bold text-[16px]">
+              ₹{listing.pricePerMonth}
+            </span>
+            /month
+          </p>
+          <p className="font-mono text-sm ">{listing.genderPreference}</p>
         </div>
       </div>
     </div>

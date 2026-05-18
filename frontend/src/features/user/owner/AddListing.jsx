@@ -145,6 +145,32 @@ function AddListing() {
       await axios.post(`${serverUrl}/api/listings/create`, formData, {
         withCredentials: true
       });
+
+      setForm({
+        title: "",
+        description: "",
+        address: {
+          house: "",
+          street: "",
+          locality: "",
+          city: "",
+          state: "",
+          pincode: "",
+          landmark: ""
+        },
+        pricePerMonth: "",
+        roomType: "",
+        genderPreference: "",
+        foodIncluded: false,
+        bookingStatus: "open",
+        amenities: [],
+        location: { type: "Point", coordinates: [] }
+      });
+
+      setPhotos([]);
+      setPreviews([]);
+
+      alert("Post Created");
       navigate("/owner/dashboard");
     } catch (err) {
       setError(err.response?.data?.message);

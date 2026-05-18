@@ -4,6 +4,12 @@ import { Navigate } from 'react-router-dom'
 
 function ProtectedRoutes({ children , allowedRole }) {
   const user = useSelector((state)=> state.user.userData)
+  const loading = useSelector((state)=> state.user.loading)
+
+  if(loading){
+    return <p>Loading...</p>
+  }
+  
   if(!user){
     return <Navigate to="/auth" />
   }

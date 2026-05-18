@@ -1,8 +1,31 @@
 import Welcome from "../components/Welcome";
 import QuickSearch from "../components/QuickSearch";
 import ListingCard from "./ListingCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { serverUrl } from "../../../App";
 function Dashboard() {
-  
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await axios(`${serverUrl}/api/listings/all`, {
+          withCredentials: true
+        });
+        console.log("Fetched listings:", response.data);
+        setListings(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log("FETCH LISTINGS ERROR:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchListings();
+  }, []);
+
   return (
     <div className="h-screen overflow-y-auto no-scrollbar">
       <Welcome />
@@ -20,9 +43,17 @@ function Dashboard() {
           </span>
         </div>
         <div className="grid grid-cols-4 gap-4 pb-32">
-          <ListingCard />
-          <ListingCard />
-          <ListingCard />
+          {loading ? (
+            <p className="text-[#5a4626] text-sm">Loading...</p>
+          ) : listings.length === 0 ? (
+            <div className="flex items-center justify-center w-full py-16 ">
+              <p className="text-[#5a4626] text-sm mb-4">No listings yet</p>
+            </div>
+          ) : (
+            listings.map((listing) => (
+              <ListingCard key={listing._id} listing={listing} />
+            ))
+          )}
         </div>
       </div>
     </div>

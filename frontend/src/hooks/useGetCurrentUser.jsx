@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import {useDispatch} from 'react-redux'
-import { setUserData } from '../redux/userSlice'
+import { setLoading, setUserData } from '../redux/userSlice'
 import { serverUrl } from '../App'
 import axios from 'axios'
 
@@ -18,10 +18,11 @@ const useGetCurrentUser = () => {
                 console.log("Current user:", response.data)
             }catch(error){
                 console.error("Error fetching current user:", error)
+                dispatch(setLoading(false))
             }
         }
         getCurrentUser()
-    },[])
+    },[dispatch]) 
 }
 
 export default useGetCurrentUser

@@ -48,9 +48,19 @@ export const createListing = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const getOwnerListings = async (req, res) => {
   try {
     const listings = await Listing.find({ owner: req.user._id });
+    res.status(200).json(listings);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching listings" });
+  }
+};
+
+export const getAllListings = async (req, res) => {
+  try {
+    const listings = await Listing.find({ bookingStatus: "open" });
     res.status(200).json(listings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching listings" });

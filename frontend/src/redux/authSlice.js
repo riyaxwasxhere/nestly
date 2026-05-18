@@ -4,7 +4,8 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         view: "signin",
-        fpStep: 1
+        fpStep: 1,
+        
     },
     reducers: {
         setView: (state, action) => {

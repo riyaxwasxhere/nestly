@@ -79,11 +79,11 @@ function Navbar() {
       </div>
       <div className="flex items-center gap-3 px-3 mb-5 cursor-pointer">
         <div className="bg-[#F5A623] w-8 h-8 rounded-full flex items-center justify-around text-lg font-bold">
-          {user.fullname[0]}
+          {/* {user?.fullname[0] || "U"} */}
         </div>
         <div>
-          <h3 className="text-sm">{user.fullname}</h3>
-          <p className="text-xs">{user.role} · SIT Siliguri</p>
+          <h3 className="text-sm">{user?.fullname || "user"}</h3>
+          <p className="text-xs">{user?.role || "role"} · SIT Siliguri</p>
         </div>
       </div>
     </div>
