@@ -4,8 +4,10 @@ import { setOwnerView } from "../../../redux/ownerSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.userData);
-  const ownerView = useSelector((state)=> state.owner.ownerView)
+  const user = useSelector((state) => state.user?.userData?.user);
+  const city = useSelector((state) => state.user?.city);
+  console.log(city)
+  const ownerView = useSelector((state)=> state.owner?.ownerView)
   const navItems = [
     {
       label: "Dashboard",
@@ -73,7 +75,7 @@ function Navbar() {
         </div>
         <div>
           <h3 className="text-sm">{user?.fullname || "user"}</h3>
-          <p className="text-xs">{user?.role || "role"} · Siliguri</p>
+          <p className="text-xs">{user?.role || "role"} · {city || "city"}</p>
         </div>
       </div>
     </div>

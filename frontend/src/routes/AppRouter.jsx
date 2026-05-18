@@ -7,9 +7,11 @@ import ForgotPassword from "../features/auth/pages/ForgotPassword";
 import useGetCurrentUser from "../hooks/useGetCurrentUser";
 import ProtectedRoutes from "./ProtectedRoutes";
 import OwnerLayout from "../features/user/owner/OwnerLayout";
+import useCurrentCity from "../hooks/useCurrentCity";
 
 const AppRouter = () => {
   useGetCurrentUser();
+  useCurrentCity();
   return (
     <Routes>
       <Route path="/" element={<Home />} />

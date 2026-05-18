@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const studentMsg = "You have 3 new messages and 2 upcoming visits this week";
-const ownerMsg = "You have 1 new message and 1 upcoming visit this week";
-
 function Welcome({ listingsCount }) {
-  const user = useSelector((state) => state.user?.userData);
+  const user = useSelector((state) => state.user?.userData?.user);
+  const studentMsg = "You have 3 new messages and 2 upcoming visits this week";
+  const ownerMsg = "You have 1 new message and 1 upcoming visit this week";
   const msg = user?.role === "student" ? studentMsg : ownerMsg;
 
   return (
@@ -25,7 +24,9 @@ function Welcome({ listingsCount }) {
       </div>
       <div className="flex gap-8">
         <div className="flex flex-col items-center bg-[#342310] px-5 py-2 rounded-lg border border-[#5a4626] leading-7 cursor-pointer">
-          <h2 className="text-[#F5A623] text-[25px] font-mono font-bold">{user?.role === "student" ? "saved" : listingsCount}</h2>
+          <h2 className="text-[#F5A623] text-[25px] font-mono font-bold">
+            {user?.role === "student" ? "saved" : listingsCount}
+          </h2>
           <p className="text-xs uppercase font-mono text-[#867a5f] font-medium">
             {user?.role === "student" ? "saved" : "listings"}
           </p>

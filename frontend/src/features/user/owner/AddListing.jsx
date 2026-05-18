@@ -4,6 +4,7 @@ import axios from "axios";
 import Section from "./Section";
 import Field from "./Field";
 import { serverUrl } from "../../../App";
+import { useSelector } from "react-redux";
 
 const amenitiesList = [
   "WiFi",
@@ -20,30 +21,31 @@ const amenitiesList = [
 
 function AddListing() {
   const navigate = useNavigate();
+  const editListing = useSelector((state) => state.owner.editListing);
 
   const [form, setForm] = useState({
-    title: "",
-    description: "",
+    title: editListing?.title || "",
+    description: editListing?.description || "",
     address: {
-      house: "",
-      street: "",
-      locality: "",
-      city: "",
-      state: "",
-      pincode: "",
-      landmark: ""
+      house: editListing?.address?.house || "",
+      street: editListing?.address?.street || "",
+      locality: editListing?.address?.locality || "",
+      city: editListing?.address?.city || "",
+      state: editListing?.address?.state || "",
+      pincode: editListing?.address?.pincode || "",
+      landmark: editListing?.address?.landmark || ""
     },
-    pricePerMonth: "",
-    roomType: "",
-    genderPreference: "",
-    foodIncluded: false,
-    bookingStatus: "open",
-    amenities: [],
+    pricePerMonth: editListing?.pricePerMonth || "",
+    roomType: editListing?.roomType || "",
+    genderPreference: editListing?.genderPreference || "",
+    foodIncluded: editListing?.foodIncluded || false,
+    bookingStatus: editListing?.bookingStatus || "open",
+    amenities: editListing?.amenities || [],
     location: { type: "Point", coordinates: [] }
   });
 
   const [photos, setPhotos] = useState([]);
-  const [previews, setPreviews] = useState([]);
+  const [previews, setPreviews] = useState(editListing?.photos || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [detecting, setDetecting] = useState(false);
@@ -142,9 +144,19 @@ function AddListing() {
       formData.append("location", JSON.stringify(form.location));
       photos.forEach((photo) => formData.append("photos", photo));
 
-      await axios.post(`${serverUrl}/api/listings/create`, formData, {
-        withCredentials: true
-      });
+      if (editListing) {
+        await axios.put(
+          `${serverUrl}/api/listings/update/${editListing._id}`,
+          formData,
+          {
+            withCredentials: true
+          }
+        );
+      } else {
+        await axios.post(`${serverUrl}/api/listings/create`, formData, {
+          withCredentials: true
+        });
+      }
 
       setForm({
         title: "",
@@ -171,7 +183,6 @@ function AddListing() {
       setPreviews([]);
 
       alert("Post Created");
-      navigate("/owner/dashboard");
     } catch (err) {
       setError(err.response?.data?.message);
     } finally {
@@ -185,7 +196,8 @@ function AddListing() {
         className="mb-1 text-3xl font-extrabold"
         style={{ fontFamily: "Playfair Display, serif" }}
       >
-        Add New <span className="text-[#F5A623]">Listing</span>
+        {editListing ? "Edit" : "Add New"}{" "}
+        <span className="text-[#F5A623]">Listing</span>
       </h1>
       <p className="text-[#f0e3c77c] text-sm mb-8">
         Fill in the details below to publish your property
@@ -416,12 +428,30 @@ function AddListing() {
         {previews.length > 0 && (
           <div className="grid grid-cols-4 gap-3 mt-4">
             {previews.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt=""
-                className="w-full h-24 object-cover rounded-xl border border-[#3d2b0f]"
-              />
+              <div key={i} className="relative">
+                <img
+                  src={src}
+                  alt=""
+                  className="w-full h-24 object-cover rounded-xl border border-[#3d2b0f]"
+                />
+
+                <button
+                  onClick={() => {
+                    const updatedPreviews = previews.filter(
+                      (_, index) => index !== i
+                    );
+
+                    setPreviews(updatedPreviews);
+
+                    if (editListing) {
+                      editListing.photos = updatedPreviews;
+                    }
+                  }}
+                  className="absolute w-5 h-5 text-xs text-white bg-red-600 rounded-full cursor-pointer top-1 right-1"
+                >
+                  ✕
+                </button>
+              </div>
             ))}
           </div>
         )}
@@ -443,7 +473,13 @@ function AddListing() {
           disabled={loading}
           className="bg-[#F5A623] cursor-pointer text-black font-bold rounded-xl px-8 py-3 text-sm hover:-translate-y-0.5 transition-all"
         >
-          {loading ? "Publishing..." : "Publish Listing →"}
+          {loading
+            ? editListing
+              ? "Updating..."
+              : "Publishing..."
+            : editListing
+              ? "Update Listing →"
+              : "Publish Listing →"}
         </button>
       </div>
     </div>

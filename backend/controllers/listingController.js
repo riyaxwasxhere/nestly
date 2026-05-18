@@ -49,6 +49,72 @@ export const createListing = async (req, res) => {
   }
 };
 
+export const updateListing = async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      address,
+      pricePerMonth,
+      roomType,
+      genderPreference,
+      foodIncluded,
+      bookingStatus,
+      amenities,
+      location
+    } = req.body;
+
+    const parsedAddress = JSON.parse(address);
+    const parsedAmenities = amenities ? JSON.parse(amenities) : [];
+    const parsedLocation = location ? JSON.parse(location) : null;
+
+    const existingListing = await Listing.findById(req.params.id);
+
+    if (!existingListing) {
+      return res.status(404).json({
+        message: "Listing not found"
+      });
+    }
+
+    let photos = existingListing.photos || [];
+
+if (req.files && req.files.length > 0) {
+  photos = req.files.map((file) => file.path);
+}
+
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        description,
+        address: parsedAddress,
+        pricePerMonth,
+        roomType,
+        genderPreference,
+        foodIncluded: foodIncluded === "true",
+        bookingStatus,
+        amenities: parsedAmenities,
+        photos: photos.length > 0 ? photos : [],
+        ...(parsedLocation?.coordinates?.length > 0 && {
+          location: parsedLocation
+        })
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Listing updated successfully",
+      listing: updatedListing
+    });
+  } catch (error) {
+    console.log("UPDATE LISTING ERROR:", error.message);
+
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
 export const getOwnerListings = async (req, res) => {
   try {
     const listings = await Listing.find({ owner: req.user._id });

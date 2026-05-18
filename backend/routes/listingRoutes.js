@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { isAuth } from "../middleware/isAuth.js";
 import { upload } from "../config/cloudinary.js";
-import { createListing, getAllListings, getOwnerListings } from "../controllers/listingController.js";
+import { createListing, getAllListings, getOwnerListings, updateListing } from "../controllers/listingController.js";
 
 const listingRouter = express.Router();
 
@@ -11,6 +11,14 @@ listingRouter.post(
   upload.array("photos", 10),
   createListing
 );
+
+listingRouter.put(
+  "/update/:id",
+  isAuth,
+  upload.array("photos", 10),
+  updateListing
+);
+
 listingRouter.get('/owner/my-listings', isAuth, getOwnerListings);
 
 listingRouter.get('/all', getAllListings);
