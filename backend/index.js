@@ -6,6 +6,7 @@ import dbConnect from './config/db.js'
 import authRouter from './routes/authRoutes.js'
 import userRouter from './routes/userRoutes.js'
 import listingRouter from './routes/listingRoutes.js'
+import convoRouter from './routes/convoRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -23,6 +24,7 @@ app.use(cookieParser())
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/listings', listingRouter)
+app.use('/api/conversations', convoRouter)
 
 app.use((err, req, res, next) => {
   console.log("GLOBAL ERROR:", err.message);
