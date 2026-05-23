@@ -6,7 +6,6 @@ function Navbar() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user?.userData?.user);
   const city = useSelector((state) => state.user?.city);
-  console.log(city)
   const ownerView = useSelector((state)=> state.owner?.ownerView)
   const navItems = [
     {

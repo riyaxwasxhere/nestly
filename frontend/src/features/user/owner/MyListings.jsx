@@ -8,7 +8,12 @@ import { setOwnerView } from '../../../redux/ownerSlice';
 function MyListings() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch()
+
+  const filteredListings = listings.filter((listing) =>
+    listing.title.toLowerCase().includes(search.toLowerCase())
+  );
   
   useEffect(() => {
     const fetchListings = async () => {
@@ -29,6 +34,7 @@ function MyListings() {
     };
     fetchListings();
   }, []);
+  
   return (
     <div className="p-8">
         <div className="flex items-center justify-between mb-4">
@@ -46,12 +52,19 @@ function MyListings() {
             + Add New Listing
           </button>
         </div>
+        <div className="flex items-center justify-between mb-4">
+          <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 px-4 py-2 border-2 border-[#413117] rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#F5A623] bg-[#342310]/20 text-[#F0E8D8] placeholder-[#867a5f]"
+           type="text" placeholder="Search your property" />
+        </div>
         <div className="grid grid-cols-4 gap-4 pb-32">
           {loading ? (
             <p className="text-[#5a4626] text-sm">Loading...</p>
-          ) : listings.length === 0 ? (
+          ) : filteredListings.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 border border-dashed border-[#3d2b0f] rounded-2xl">
-              <p className="text-[#5a4626] text-sm mb-4">No listings yet</p>
+              <p className="text-[#5a4626] text-sm mb-4">No listings found</p>
               <button
                 onClick={()=>{
                   dispatch(setOwnerView("Add Listing"))
@@ -62,7 +75,7 @@ function MyListings() {
               </button>
             </div>
           ) : (
-            listings.map((listing) => (
+            filteredListings.map((listing) => (
               <ListingCard key={listing._id} listing={listing} />
             ))
           )}

@@ -14,6 +14,7 @@ import AddListing from './AddListing'
 
 function OwnerLayout() {
   const activeView = useSelector((state) => state.owner.ownerView)
+  
   return (
     <div className="bg-[#0E0A07] text-[#F0E8D8] flex ">
       <div className="flex h-screen overflow-hidden">

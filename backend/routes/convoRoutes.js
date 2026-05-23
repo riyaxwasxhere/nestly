@@ -1,10 +1,12 @@
 import express, { Router } from 'express'
-import { createConversation, getConversationById, getUserConversations } from '../controllers/convoController.js'
+import { addMessage, createConversation, getConversationById, getMessagesByConversationId, getUserConversations } from '../controllers/convoController.js'
 
 const convoRouter = Router()
 
 convoRouter.post('/create', createConversation)
-convoRouter.get('/:userId', getUserConversations)
-convoRouter.get('/:conversationId', getConversationById)
+convoRouter.get('/user/:userId', getUserConversations)
+convoRouter.get('/conversation/:conversationId', getConversationById)
+convoRouter.post('/message', addMessage)
+convoRouter.get('/messages/:conversationId', getMessagesByConversationId)
 
 export default convoRouter
