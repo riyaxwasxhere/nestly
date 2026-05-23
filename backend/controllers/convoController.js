@@ -23,8 +23,9 @@ export const getUserConversations = async(req, res) => {
             members: { $in: [userId] }
         })
         const convoUserData = conversations.map(async (convo)=>{
-            const receiverId = convo.members.find((member) => member !== userId)
+            const receiverId = convo.members.find((member) => member.toString() !== userId)
             const receiver = await User.findById(receiverId)
+            if(!receiver) return null
             return ({
                 conversationId: convo._id,
                 receiverId: receiver._id,
@@ -32,7 +33,8 @@ export const getUserConversations = async(req, res) => {
                 receiverProfilePic: receiver.profilePic
             })
         })
-        res.status(200).json(await Promise.all(convoUserData))
+        const result = await Promise.all(convoUserData)
+        res.status(200).json(result.filter(Boolean))
     }catch(error){
         res.status(500).json(error)
     }
@@ -69,19 +71,21 @@ export const getMessagesByConversationId = async(req, res) => {
         const messages = await Messages.find({conversationId})
         const messageUserData = messages.map(async (msg)=>{
             const sender = await User.findById(msg.senderId)
+            if(!sender) return null
             return ({
                 messageId: msg._id,
                 senderId: msg.senderId,
                 senderProfilePic: sender.profilePic,
                 text: msg.text,
-                timestamp: msg.timestamp,
+                timestamp: msg.createdAt,
                 user : {
                     email: sender.email,
                     fullName: sender.name
                 }
             })
         })
-        res.status(200).json(await Promise.all(messageUserData))
+        const result = await Promise.all(messageUserData)
+        res.status(200).json(result.filter(Boolean))
     }catch(error){
         res.status(500).json(error)
     }

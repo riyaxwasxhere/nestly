@@ -20,38 +20,42 @@ function Messages() {
   const currentUserId = currentUser?.user?._id;
 
   const filteredConversations = conversations.filter((convo) =>
-    convo.receiverName.toLowerCase().includes(search.toLowerCase())
+    convo?.receiverName?.toLowerCase().includes(search.toLowerCase())
   );
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUserId) return;
     socket.connect();
-    socket.emit("addUser", currentUser.user._id);
+    socket.emit("addUser", currentUserId);
     socket.on("getUsers", (users) => {
       setOnlineUsers(users);
     });
     return () => {
       socket.off("getUsers");
+      socket.disconnect();
     };
-  }, [currentUser]);
+  }, [currentUserId]);
+
+  const activeConversationRef = useRef(activeConversation);
+  useEffect(() => {
+    activeConversationRef.current = activeConversation;
+  }, [activeConversation]);
 
   useEffect(() => {
     socket.on("getMessage", ({ senderId, text }) => {
       if (activeConversationRef.current?.receiverId === senderId) {
         setMessages((prev) => [
           ...prev,
-          { senderId, text, timestamp: new Date() }
+          { 
+            senderId,
+            text,
+            createdAt: new Date() }
         ]);
       }
     });
     return () => socket.off("getMessage");
   }, []);
 
-  const activeConversationRef = useRef(activeConversation);
-  useEffect(() => {
-    activeConversationRef.current = activeConversation;
-  }, [activeConversation]);
-  
   useEffect(() => {
     if (!currentUserId) return;
     const fetchConversations = async () => {
@@ -69,7 +73,7 @@ function Messages() {
       }
     };
     fetchConversations();
-  }, [currentUser, currentUserId]);
+  }, [currentUserId]);
 
   useEffect(() => {
     if (!activeConversation?.conversationId) return;
@@ -81,6 +85,7 @@ function Messages() {
             withCredentials: true
           }
         );
+        console.log("Fetched messages:", response);
         setMessages(response.data);
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -96,7 +101,7 @@ function Messages() {
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !activeConversation) return;
     try {
-      const response = await axios.post(
+      const { data } = await axios.post(
         `${serverUrl}/api/conversations/message`,
         {
           conversationId: activeConversation.conversationId,
@@ -107,12 +112,11 @@ function Messages() {
           withCredentials: true
         }
       );
-      setNewMessage((prev) => [...prev, response.data]);
+      setMessages((prev) => [...prev, data]);
       socket.emit("sendMessage", {
         senderId: currentUserId,
         receiverId: activeConversation.receiverId,
-        text: newMessage.trim(),
-        conversationId: activeConversation.conversationId
+        text: newMessage.trim()
       });
       setNewMessage("");
     } catch (error) {
@@ -120,7 +124,8 @@ function Messages() {
     }
   };
 
-  const isOnline = (userId) => onlineUsers.includes(userId);
+  const isOnline = (userId) =>
+    onlineUsers.some((user) => user.userId === userId);
 
   return (
     <div className="flex">
@@ -154,7 +159,7 @@ function Messages() {
               <p className="text-xs text-gray-500">
                 {messages.length > 0 &&
                 activeConversation?.conversationId === convo.conversationId
-                  ? messages[messages.length - 1]?.message
+                  ? messages[messages.length - 1]?.text
                   : "No messages yet"}
               </p>
             </div>

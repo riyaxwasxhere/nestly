@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 function Welcome({ listingsCount }) {
-  const user = useSelector((state) => state.user?.userData?.user);
+  const user = useSelector((state) => state?.user?.userData);
   const studentMsg = "You have 3 new messages and 2 upcoming visits this week";
   const ownerMsg = "You have 1 new message and 1 upcoming visit this week";
   const msg = user?.role === "student" ? studentMsg : ownerMsg;
