@@ -1,15 +1,12 @@
-import React, { useState } from "react";
 import Logo from "../../../components/ui/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { setStudentView } from "../../../redux/studentSlice";
 
 function Navbar() {
-  const [activeItem, setActiveItem] = useState("Dashboard");
-  const handleActiveItem = (item) => {
-    setActiveItem(item);
-  };
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.userData);
+  const user = useSelector((state) => state.user?.userData);
+  const city = useSelector((state) => state.user?.city);
+  const studentView = useSelector((state)=> state.student?.studentView)
 
   const navItems = [
     {
@@ -65,10 +62,9 @@ function Navbar() {
             {navItems.map((item) => (
               <div
                 onClick={() => {
-                  handleActiveItem(item.label);
                   dispatch(setStudentView(item.label));
                 }}
-                className={`flex text-sm items-center gap-3 text-[#F0E8D8] font-medium py-3 px-4 cursor-pointer ${activeItem === item.label ? "bg-[#f5a52320] text-[#F5A623] rounded-lg border border-[#764d0c] hover:bg-[#f5a52340] hover:border-[#f5a52340] transition-all duration-100" : "hover:bg-[#f5a52320] hover:border-[#f5a52320] transition-all duration-100 rounded-lg border border-transparent"}`}
+                className={`flex text-sm items-center gap-3 text-[#F0E8D8] font-medium py-3 px-4 cursor-pointer ${studentView === item.label ? "bg-[#f5a52320] text-[#F5A623] rounded-lg border border-[#764d0c] hover:bg-[#f5a52340] hover:border-[#f5a52340] transition-all duration-100" : "hover:bg-[#f5a52320] hover:border-[#f5a52320] transition-all duration-100 rounded-lg border border-transparent"}`}
               >
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
@@ -79,11 +75,13 @@ function Navbar() {
       </div>
       <div className="flex items-center gap-3 px-3 mb-5 cursor-pointer">
         <div className="bg-[#F5A623] w-8 h-8 rounded-full flex items-center justify-around text-lg font-bold">
-          {/* {user?.fullname[0] || "U"} */}
+          {user?.fullname[0] || "U"}
         </div>
         <div>
           <h3 className="text-sm">{user?.fullname || "user"}</h3>
-          <p className="text-xs">{user?.role || "role"} · SIT Siliguri</p>
+          <p className="text-xs">
+            {user?.role || "role"} · {city || "City"}
+          </p>
         </div>
       </div>
     </div>

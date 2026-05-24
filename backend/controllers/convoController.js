@@ -7,7 +7,8 @@ export const createConversation = async(req, res) => {
     try{
         const {senderId, receiverId} = req.body
         const newConversation = new Conversations({
-            members: [senderId, receiverId]
+            members: [senderId, receiverId],
+            
         })
         const savedConversation = await newConversation.save()
         res.status(200).json(savedConversation )
@@ -29,7 +30,7 @@ export const getUserConversations = async(req, res) => {
             return ({
                 conversationId: convo._id,
                 receiverId: receiver._id,
-                receiverName: receiver.name,
+                receiverName: receiver.fullname,
                 receiverProfilePic: receiver.profilePic
             })
         })
@@ -80,7 +81,7 @@ export const getMessagesByConversationId = async(req, res) => {
                 timestamp: msg.createdAt,
                 user : {
                     email: sender.email,
-                    fullName: sender.name
+                    fullName: sender.fullname
                 }
             })
         })
