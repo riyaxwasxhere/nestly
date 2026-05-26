@@ -42,7 +42,7 @@ function Saved() {
         </span>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col h-screen gap-4 overflow-y-auto no-scrollbar">
         {savedListings.length > 0 ? (
           savedListings.map((saved) => (
             <SavedCard

@@ -4,11 +4,6 @@ export const saveListing = async (req, res) => {
   try {
     const { userId, savedListingId } = req.body;
 
-    const newSaved = await Saved.create({
-      user: userId,
-      savedListing: savedListingId
-    });
-
     const existing = await Saved.findOne({
       user: userId,
       savedListing: savedListingId
@@ -20,7 +15,14 @@ export const saveListing = async (req, res) => {
       });
     }
 
-    res.status(201).json(newSaved);
+    const newSaved = await Saved.create({
+      user: userId,
+      savedListing: savedListingId
+    });
+
+    const populatedSaved = await newSaved.populate("savedListing");
+
+    res.status(201).json(populatedSaved);
   } catch (error) {
     res.status(500).json({
       message: error.message

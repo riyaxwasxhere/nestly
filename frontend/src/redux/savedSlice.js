@@ -14,7 +14,7 @@ const savedSlice = createSlice({
         },
         removeFromSavedListings: (state, action) => {
             state.savedListings = state.savedListings.filter((item) =>
-                item._id !== action.payload
+                item.savedListing._id !== action.payload
             )
         }
     }

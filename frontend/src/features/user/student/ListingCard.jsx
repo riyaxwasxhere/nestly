@@ -10,28 +10,27 @@ function ListingCard({ listing }) {
   const dispatch = useDispatch();
   const currentUserId = useSelector((state) => state.user?.userData?._id);
   const savedListings = useSelector((state) => state.saved?.savedListings);
-
-  const isSaved = savedListings.some((item) => item._id === listing._id);
+  const isSaved = savedListings.some((item) => item.savedListing._id === listing._id);
 
   const handleSave = async () => {
     try {
       if (!isSaved) {
-        await axios.post(
+        const response = await axios.post(
           `${serverUrl}/api/saved/save`,
           {
             userId: currentUserId,
-            savedListing: listing._id
+            savedListingId: listing._id
           },
           {
             withCredentials: true
           }
         );
-        dispatch(addToSavedListings(listing));
+        dispatch(addToSavedListings(response.data));
       } else {
         await axios.delete(`${serverUrl}/api/saved/remove`, {
           data: {
             userId: currentUserId,
-            savedListing: listing._id
+            savedListingId: listing._id
           },
           withCredentials: true
         });
@@ -54,7 +53,7 @@ function ListingCard({ listing }) {
                 : "url('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70')"
           }}
         >
-          <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f] absolute">
+          <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f]absolute">
             <span className="px-2 bg-[#362704cf] rounded-4xl border border-[#8d8269]">
               {listing.averageRating > 0
                 ? `⭐ ${listing.averageRating} (${listing.totalReviews} reviews)`
@@ -76,7 +75,6 @@ function ListingCard({ listing }) {
         <p className="text-xs text-[#867a5f] font-medium">
           📍{listing.address?.locality}, {listing.address?.city}
         </p>
-        <p className="text-[10px]">{listing._id}</p>
         <div className="flex items-center justify-between my-2">
           <p className="text-xs text-[#867a5f]">
             <span className="text-[#F5A623] font-bold text-[16px]">

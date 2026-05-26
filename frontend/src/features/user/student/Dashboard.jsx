@@ -4,10 +4,28 @@ import ListingCard from "./ListingCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverUrl } from "../../../App";
+import { useDispatch, useSelector } from "react-redux";
+import { setSavedListings } from "../../../redux/savedSlice";
 
 function Dashboard() {
+  const dispatch = useDispatch()
+  const currentUserId = useSelector((state) => state.user?.userData?._id);
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchSavedListings = async () => {
+      try {
+        const response =await  axios.get(`${serverUrl}/api/saved/listings/${currentUserId}`, {
+          withCredentials: true
+        });
+        dispatch(setSavedListings(response.data))
+      } catch (error) {
+        console.log("Failed to fetch saved Listings: ", error);
+      }
+    };
+    fetchSavedListings()
+  },[dispatch, currentUserId]);
 
   useEffect(() => {
     const fetchListings = async () => {
