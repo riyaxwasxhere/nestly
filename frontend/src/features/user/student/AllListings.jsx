@@ -11,6 +11,10 @@ function AllListings() {
   const currentUserId = useSelector((state) => state.user?.userData?._id);
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [budget, setBudget] = useState("Any Budget");
+  const [roomType, setRoomType] = useState("Room Type");
+  const [gender, setGender] = useState("Gender");
 
   useEffect(() => {
     const fetchSavedListings = async () => {
@@ -44,10 +48,55 @@ function AllListings() {
     fetchListings();
   }, []);
 
+  const filteredListings = listings.filter((listing) => {
+    const matchesSearch =
+      searchQuery === "" ||
+      listing.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      listing.address?.area?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    let matchesBudget = true;
+
+    if (budget === "Under ₹5,000") {
+      matchesBudget = listing.pricePerMonth < 5000;
+    }
+
+    if (budget === "₹5,000 - ₹8,000") {
+      matchesBudget = listing.pricePerMonth >= 5000 && listing.pricePerMonth <= 8000;
+    }
+
+    if (budget === "₹8,000 - ₹12,000") {
+      matchesBudget = listing.pricePerMonth >= 8000 && listing.pricePerMonth <= 12000;
+    }
+
+    if (budget === "₹12,000 - ₹20,000") {
+      matchesBudget = listing.pricePerMonth >= 12000 && listing.pricePerMonth <= 20000;
+    }
+
+    if (budget === "Above ₹20,000") {
+      matchesBudget = listing.pricePerMonth > 20000;
+    }
+
+    const matchesRoom =
+      roomType === "Room Type" || listing.roomType === roomType;
+
+    const matchesGender = gender === "Gender" || listing.genderPreference === gender;
+
+    return matchesSearch && matchesBudget && matchesRoom && matchesGender;
+  });
+
   return (
     <div className="h-screen overflow-y-auto no-scrollbar">
       <div className="px-3">
-        <QuickSearch />
+        <QuickSearch
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        budget={budget}
+        setBudget={setBudget}
+        roomType={roomType}
+        setRoomType={setRoomType}
+        gender={gender}
+        setGender={setGender}
+      />
       </div>
       <div className="px-10">
         <div className="flex items-center justify-between mb-4">
@@ -62,12 +111,12 @@ function AllListings() {
         <div className="grid grid-cols-4 gap-4 pb-32">
           {loading ? (
             <p className="text-[#5a4626] text-sm">Loading...</p>
-          ) : listings.length === 0 ? (
+          ) : filteredListings.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 border border-dashed border-[#3d2b0f] rounded-2xl">
               <p className="text-[#5a4626] text-sm mb-4">No listings yet</p>
             </div>
           ) : (
-            listings.map((listing) => (
+            filteredListings.map((listing) => (
               <ListingCard key={listing._id} listing={listing} />
             ))
           )}
