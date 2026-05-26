@@ -15,7 +15,7 @@ function OwnerDashboard() {
   const filteredListings = listings.filter((listing) =>
     listing.title.toLowerCase().includes(search.toLowerCase())
   );
-  
+
   useEffect(() => {
     const fetchListings = async () => {
       try {
