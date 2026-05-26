@@ -7,7 +7,7 @@ const savedSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-    listing: {
+    savedListing: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Listing",
       required: true
@@ -16,7 +16,7 @@ const savedSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-savedSchema.index({ user: 1, listing: 1 }, { unique: true });
+savedSchema.index({ user: 1, savedListing: 1 }, { unique: true });
 
 const Saved = mongoose.model("Saved", savedSchema);
 

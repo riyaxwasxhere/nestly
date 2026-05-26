@@ -4,26 +4,30 @@ import SavedCard from "./SavedCard";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../../../App";
+import { useDispatch } from "react-redux";
 
 function Saved() {
-  const [listings, setListings] = useState([]);
+  const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user?.userData);
- 
-  useEffect(()=>{
+  const currentUserId = currentUser?._id;
+  const [savedListings, setSavedListings] = useState([]);
+
+  useEffect(() => {
+    if (!currentUserId) return;
     const fetchSavedListings = async () => {
       try {
         const response = await axios.get(
-          `${serverUrl}/api/saved/listings/${currentUser?._id}`,
+          `${serverUrl}/api/saved/listings/${currentUserId}`,
           { withCredentials: true }
         );
-        setListings(response.data);
-      }catch (error) {
+        setSavedListings(response.data);
+      } catch (error) {
         console.error("Error fetching saved listings:", error);
       }
-    }
+    };
     fetchSavedListings();
-  }, [currentUser])
-  
+  }, [currentUserId, dispatch]);
+
   return (
     <div className="px-10 py-8">
       <div className="flex items-center justify-between">
@@ -33,13 +37,24 @@ function Saved() {
         >
           ❤️ Saved Properties
         </h2>
-        <span className="text-xs text-[#867a5f]">{listings.length} properties saved</span>
+        <span className="text-xs text-[#867a5f]">
+          {savedListings.length} properties saved
+        </span>
       </div>
-      
+
       <div className="flex flex-col gap-4">
-        {listings.length > 0 ? (
-          listings.map((saved) => (
-            <SavedCard key={saved._id} listing={saved.listing} />
+        {savedListings.length > 0 ? (
+          savedListings.map((saved) => (
+            <SavedCard
+              key={saved._id}
+              savedListing={saved.savedListing}
+              userId={currentUserId}
+              onRemove={(id) => {
+                setSavedListings((prev) =>
+                  prev.filter((s) => s.savedListing?._id !== id)
+                );
+              }}
+            />
           ))
         ) : (
           <p className="text-sm text-[#867a5f]">No saved properties yet.</p>

@@ -14,7 +14,6 @@ function AllListings() {
         const response = await axios(`${serverUrl}/api/listings/all`, {
           withCredentials: true
         });
-        console.log("Fetched listings:", response.data);
         setListings(response.data);
         setLoading(false);
       } catch (error) {

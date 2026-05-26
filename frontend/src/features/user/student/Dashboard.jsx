@@ -4,6 +4,7 @@ import ListingCard from "./ListingCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverUrl } from "../../../App";
+
 function Dashboard() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,6 @@ function Dashboard() {
         const response = await axios(`${serverUrl}/api/listings/all`, {
           withCredentials: true
         });
-        console.log("Fetched listings:", response.data);
         setListings(response.data);
         setLoading(false);
       } catch (error) {
