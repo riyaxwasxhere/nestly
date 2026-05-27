@@ -6,6 +6,7 @@ function Welcome({ listingsCount }) {
   const studentMsg = "You have 3 new messages and 2 upcoming visits this week";
   const ownerMsg = "You have 1 new message and 1 upcoming visit this week";
   const msg = user?.role === "student" ? studentMsg : ownerMsg;
+  const savedListings = useSelector((state)=> state.saved?.savedListings)
 
   return (
     <div className="flex items-center justify-between p-8 bg-[#261A0A] rounded-2xl m-6 border border-[#5a4626]">
@@ -25,7 +26,7 @@ function Welcome({ listingsCount }) {
       <div className="flex gap-8">
         <div className="flex flex-col items-center bg-[#342310] px-5 py-2 rounded-lg border border-[#5a4626] leading-7 cursor-pointer">
           <h2 className="text-[#F5A623] text-[25px] font-mono font-bold">
-            {user?.role === "student" ? "saved" : listingsCount}
+            {user?.role === "student" ? savedListings.length : listingsCount}
           </h2>
           <p className="text-xs uppercase font-mono text-[#867a5f] font-medium">
             {user?.role === "student" ? "saved" : "listings"}

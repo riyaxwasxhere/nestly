@@ -106,7 +106,7 @@ function AllListings() {
           >
             🏠 All Listings
           </h2>
-          <span className="text-sm text-[#867a5f] ">24 results found</span>
+          <span className="text-sm text-[#867a5f] ">{filteredListings.length} results found</span>
         </div>
         <div className="grid grid-cols-4 gap-4 pb-32">
           {loading ? (
