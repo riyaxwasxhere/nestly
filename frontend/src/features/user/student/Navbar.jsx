@@ -29,10 +29,10 @@ function Navbar() {
       label: "Scheduled Visits",
       icon: "📅"
     },
-    {
-      label: "Recently Viewed",
-      icon: "🕐"
-    },
+    // {
+    //   label: "Recently Viewed",
+    //   icon: "🕐"
+    // },
     // {
     //   label: "Find Roommate",
     //   icon: "👥"

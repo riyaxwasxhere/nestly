@@ -58,7 +58,7 @@ function VisitCard({ visitRequest, onCancel }) {
           </p>
           <p className="flex items-center gap-1 text-sm">
             <Calendar size={15} />
-            {visitRequest.visitDate?.split("T")[0]}
+             Visit Date: {visitRequest.visitDate?.split("T")[0]}
           </p>
         </div>
 

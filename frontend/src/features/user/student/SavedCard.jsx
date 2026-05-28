@@ -3,34 +3,33 @@ import React from "react";
 import { serverUrl } from "../../../App";
 
 function SavedCard({ savedListing, userId, onRemove, onClick }) {
-  
   if (!savedListing) {
     return null;
   }
-  const handleRemove = async ()=>{
-    try{
-      await axios.delete(
-        `${serverUrl}/api/saved/remove`,
-        {
-          data: {
-            userId,
-            savedListingId: savedListing._id
-          },
-          withCredentials: true
-        }
-      );
+  const handleRemove = async () => {
+    try {
+      await axios.delete(`${serverUrl}/api/saved/remove`, {
+        data: {
+          userId,
+          savedListingId: savedListing._id
+        },
+        withCredentials: true
+      });
       onRemove(savedListing._id);
-    }catch(error){
+    } catch (error) {
       console.error("Error removing saved listing:", error);
     }
-  }
+  };
   return (
     <div className="hover:bg-[#2C1E0D] bg-[#1f160f] flex p-3 justify-between rounded-xl border border-[#492b0275] transition-all duration-200">
       <div className="flex gap-4">
         <div>
           <img
             className="w-20 h-20 rounded-lg"
-            src={savedListing.photos?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70"}
+            src={
+              savedListing.photos?.[0] ||
+              "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70"
+            }
             alt=""
           />
         </div>
@@ -41,16 +40,39 @@ function SavedCard({ savedListing, userId, onRemove, onClick }) {
           <p className="text-[#867a5f] text-xs my-1 font-medium">
             📍 {savedListing.address?.locality}, {savedListing.address?.city}
           </p>
-          <p className="text-[#F4A523] font-bold font-mono">₹ {savedListing.pricePerMonth}/month</p>
+          <p className="text-[#F4A523] font-bold font-mono">
+            ₹ {savedListing.pricePerMonth}/month
+          </p>
         </div>
       </div>
-      <div onClick={onClick} className='flex items-center gap-2 '>
-        <button className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-[#F4A523] hover:text-[#F4A523] transition-all duration-200">View Details</button>
+      <div onClick={onClick} className="flex items-center gap-2 ">
+        <div>
+          <span
+            className={`px-3 py-1.5 backdrop-blur-md bg-black/30 border rounded-lg flex items-center text-xs ${
+              savedListing.bookingStatus === "open"
+                ? "border-green-500 text-green-400"
+                : "border-red-500 text-red-400"
+            }`}
+          >
+            {savedListing.bookingStatus === "open" ? (
+              <span>Available</span>
+            ) : (
+              <span>Occupied</span>
+            )}
+          </span>
+        </div>
+        <button className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-[#F4A523] hover:text-[#F4A523] transition-all duration-200">
+          View Details
+        </button>
         <button
-        onClick={(e) => {
-          e.stopPropagation()
-          handleRemove()}}
-         className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-red-400 hover:text-red-400 transition-all duration-200">Remove</button>
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemove();
+          }}
+          className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-red-400 hover:text-red-400 transition-all duration-200"
+        >
+          Remove
+        </button>
       </div>
     </div>
   );

@@ -86,14 +86,14 @@ function ListingCard({ listing, onClick }) {
           </div>
           <div>
             <span
-            className={`px-4 backdrop-blur-md bg-black/30 border rounded-2xl flex items-center ${
-              listing.bookingStatus === "open"
-                ? "border-green-500 text-green-400"
-                : "border-red-500 text-red-400"
-            }`}
-          >
-            {listing.bookingStatus}
-          </span>
+              className={`px-4 backdrop-blur-md bg-black/30 border rounded-2xl flex items-center ${
+                listing.bookingStatus === "open"
+                  ? "border-green-500 text-green-400"
+                  : "border-red-500 text-red-400"
+              }`}
+            >
+              {listing.bookingStatus}
+            </span>
           </div>
         </div>
         <div className="flex items-center justify-between my-2">
@@ -103,7 +103,9 @@ function ListingCard({ listing, onClick }) {
             </span>
             /month
           </p>
-          <span className="text-xs text-[#d0cbbc] font-medium rounded-sm ">Gender : {listing.genderPreference}</span>
+          <span className="text-xs text-[#d0cbbc] font-medium rounded-sm ">
+            Gender : {listing.genderPreference}
+          </span>
         </div>
       </div>
     </div>
