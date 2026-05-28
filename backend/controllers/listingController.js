@@ -117,7 +117,7 @@ if (req.files && req.files.length > 0) {
 
 export const getOwnerListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ owner: req.user._id });
+    const listings = await Listing.find({ owner: req.user._id }).populate("owner");
     res.status(200).json(listings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching listings" });
@@ -126,7 +126,7 @@ export const getOwnerListings = async (req, res) => {
 
 export const getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ bookingStatus: "open" });
+    const listings = await Listing.find({ bookingStatus: "open" }).populate("owner");
     res.status(200).json(listings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching listings" });

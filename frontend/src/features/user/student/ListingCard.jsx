@@ -6,7 +6,7 @@ import {
   removeFromSavedListings
 } from "../../../redux/savedSlice";
 
-function ListingCard({ listing }) {
+function ListingCard({ listing, onClick }) {
   const dispatch = useDispatch();
   const currentUserId = useSelector((state) => state.user?.userData?._id);
   const savedListings = useSelector((state) => state.saved?.savedListings);
@@ -42,7 +42,7 @@ function ListingCard({ listing }) {
   };
 
   return (
-    <div className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
+    <div onClick={onClick} className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
       <div className="relative">
         <div
           className="h-40 bg-center bg-cover rounded-t-xl"

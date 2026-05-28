@@ -1,95 +1,132 @@
-import React from 'react'
+import React from "react";
 import { Calendar, House, MessageCircle, X } from "lucide-react";
+import ImageSlider from "./ImageSlider";
 
-function ListingDetails() {
+function ListingDetails({ listing, onClose }) {
+  if (!listing) return null;
+  console.log(listing);
   return (
-    <div className="h-screen pb-20 overflow-y-auto no-scrollbar">
-      <div className=" h-120">
-        <div className="flex justify-between px-10 py-3">
-          <span className="px-3 py-1 border rounded-2xl">Open</span>
-          <X className="cursor-pointer" />
-        </div>
-        <img src="" alt="" />
-      </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
+      <div className="relative w-[90%] max-w-[1100px] max-h-[90vh] overflow-y-auto  no-scrollbar rounded-3xl bg-[#2a180a] p-6 shadow-2xl border">
+        <div className="h-screen overflow-y-auto no-scrollbar">
+          <div className="relative overflow-hidden h-120 rounded-3xl">
+            <div className="absolute top-0 left-0 z-50 flex items-center justify-between w-full px-6 py-4">
+              <span
+                className={`px-4 py-1 backdrop-blur-md bg-black/30 border rounded-2xl ${
+                  listing.bookingStatus === "open"
+                    ? "border-green-500 text-green-400"
+                    : "border-red-500 text-red-400"
+                }`}
+              >
+                {listing.bookingStatus}
+              </span>
 
-      <div className="p-10 ">
-        <div className="flex justify-between pb-3 border-b border-[#3d2b0f]">
-          <div>
-            <h2
-              style={{ fontFamily: "Playfair Display, serif" }}
-              className="text-2xl font-semibold text-[#F5A623]"
-            >
-              The Oak Loft
-            </h2>
-            <p className="text-sm">📍 Subhash Nagar, Siliguri </p>
-          </div>
-          <div className="flex flex-col items-end ">
-            <p
-              style={{ fontFamily: "Playfair Display, serif" }}
-              className="text-3xl font-semibold"
-            >
-              ₹6,500
-            </p>
-            <p className="text-sm">per month</p>
-          </div>
-        </div>
-
-        <div className="border-b border-[#3d2b0f] py-3 flex gap-2">
-          <span className="px-4 py-1 rounded-full">Single Room</span>
-          <span className="px-4 py-1 rounded-full">Single Room</span>
-          <span className="px-4 py-1 rounded-full">Single Room</span>
-        </div>
-
-        <div className="py-3  border-b border-[#3d2b0f]">
-          <p className="pb-2 text-sm uppercase">Amenities</p>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-            <div className="px-4 py-3 rounded-2xl">High speed wifi</div>
-          </div>
-        </div>
-
-        <div className="py-3  border-b border-[#3d2b0f]">
-          <p className="text-[16px] uppercase">about this place</p>
-          <p className="text-sm">
-            A cozy, sunlit single room on the second floor with large windows
-            and a wooden study desk. Quiet neighbourhood, ideal for students.
-            All utilities included in rent.
-          </p>
-        </div>
-
-        <div className="flex items-center justify-between py-3 ">
-          <div className="flex gap-2">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F5A623]">
-              SR
+              <button
+                onClick={onClose}
+                className="p-2 rounded-full bg-black/40 backdrop-blur-md"
+              >
+                <X className="w-5 h-5 text-white cursor-pointer" />
+              </button>
             </div>
-            <div className="flex flex-col ">
-              <h3 className="text-lg">Surekha Rao</h3>
-              <p className="text-sm leading-2">Posted on: date</p>
-            </div>
-          </div>
-          <span className="px-4 py-1 text-sm bg-green-900 rounded-full">
-            ⭐ 4.8 · 23 reviews{" "}
-          </span>
-        </div>
 
-        <div className="grid grid-cols-3 gap-4 py-3">
-          <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
-            <MessageCircle /> Message
+            <ImageSlider photos={listing.photos} />
           </div>
-          <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
-            <Calendar /> Book Visit
-          </div>
-          <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
-            <House /> Book Property
+
+          <div className="p-10 ">
+            <div className="flex justify-between pb-3 border-b border-[#3d2b0f]">
+              <div>
+                <h2
+                  style={{ fontFamily: "Playfair Display, serif" }}
+                  className="text-2xl font-semibold text-[#F5A623]"
+                >
+                  {listing.title}
+                </h2>
+                <p className="text-sm">
+                  📍 {listing.address.house},{listing.address.street},
+                  {listing.address.landmark
+                    ? `near ${listing.address.landmark}`
+                    : ``}
+                  , {listing.address.locality},{listing.address.city},
+                  {listing.address.state},{listing.address.pincode}{" "}
+                </p>
+              </div>
+              <div className="flex flex-col items-end ">
+                <p
+                  style={{ fontFamily: "Playfair Display, serif" }}
+                  className="text-3xl font-semibold"
+                >
+                  ₹{listing.pricePerMonth}
+                </p>
+                <p className="text-sm">per month</p>
+              </div>
+            </div>
+
+            <div className="border-b border-[#3d2b0f] py-3 flex gap-2">
+              <span className="px-4 py-1 rounded-full bg-amber-50/10">
+                Room Type: {listing.roomType}
+              </span>
+              <span className="px-4 py-1 rounded-full bg-amber-50/10">
+                Gender Preference: {listing.genderPreference}
+              </span>
+              <span className="px-4 py-1 rounded-full bg-amber-50/10">
+                Food Included: {listing.foodIncluded ? `Yes` : `No`}
+              </span>
+            </div>
+
+            <div className="py-3  border-b border-[#3d2b0f]">
+              <p className="pb-2 text-[16px] uppercase">Amenities</p>
+              <div className="grid grid-cols-2 gap-4">
+                {listing.amenities.map((item) => (
+                  <div className="px-4 py-3 rounded-2xl bg-red-50/10">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="py-3  border-b border-[#3d2b0f]">
+              <p className="text-[16px] uppercase">about this place</p>
+              <p className="text-sm">{listing.description}</p>
+            </div>
+
+            <div className="flex items-center justify-between py-3 ">
+              <div className="flex gap-2">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F5A623]">
+                  {listing.owner?.fullname?.[0]?.[0]}
+                  {listing.owner?.fullname?.split(" ")[1]?.[0]}
+                  {listing.owner?.fullname?.split(" ")[2]?.[0]}
+                </div>
+                <div className="flex flex-col ">
+                  <h3 className="text-lg">{listing.owner?.fullname}</h3>
+                  <p className="text-sm leading-2">
+                    Posted on: {listing.createdAt?.split("T")[0]}
+                  </p>
+                </div>
+              </div>
+              <span className="px-4 py-1 text-sm bg-green-900 rounded-full">
+                {listing.averageRating > 0
+                  ? `⭐ ${listing.averageRating} · `
+                  : ``}{" "}
+                {listing.totalReviews} reviews{" "}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 py-3">
+              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+                <MessageCircle /> Message
+              </div>
+              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+                <Calendar /> Book Visit
+              </div>
+              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+                <House /> Book Property
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ListingDetails
+export default ListingDetails;

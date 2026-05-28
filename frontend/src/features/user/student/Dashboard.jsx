@@ -1,12 +1,14 @@
 import Welcome from "../components/Welcome";
 import QuickSearch from "../components/QuickSearch";
 import ListingCard from "./ListingCard";
+import ListingDetails from "./ListingDetails";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import { useDispatch, useSelector } from "react-redux";
 import { setSavedListings } from "../../../redux/savedSlice";
 import { setStudentView } from "../../../redux/studentSlice";
+ 
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -17,6 +19,18 @@ function Dashboard() {
   const [budget, setBudget] = useState("Any Budget");
   const [roomType, setRoomType] = useState("Room Type");
   const [gender, setGender] = useState("Gender");
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = (listing) => {
+    setSelectedListing(listing);
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    setSelectedListing(null);
+  };
 
   useEffect(() => {
     const fetchSavedListings = async () => {
@@ -65,15 +79,18 @@ function Dashboard() {
     }
 
     if (budget === "₹5,000 - ₹8,000") {
-      matchesBudget = listing.pricePerMonth >= 5000 && listing.pricePerMonth <= 8000;
+      matchesBudget =
+        listing.pricePerMonth >= 5000 && listing.pricePerMonth <= 8000;
     }
 
     if (budget === "₹8,000 - ₹12,000") {
-      matchesBudget = listing.pricePerMonth >= 8000 && listing.pricePerMonth <= 12000;
+      matchesBudget =
+        listing.pricePerMonth >= 8000 && listing.pricePerMonth <= 12000;
     }
 
     if (budget === "₹12,000 - ₹20,000") {
-      matchesBudget = listing.pricePerMonth >= 12000 && listing.pricePerMonth <= 20000;
+      matchesBudget =
+        listing.pricePerMonth >= 12000 && listing.pricePerMonth <= 20000;
     }
 
     if (budget === "Above ₹20,000") {
@@ -83,11 +100,12 @@ function Dashboard() {
     const matchesRoom =
       roomType === "Room Type" || listing.roomType === roomType;
 
-    const matchesGender = gender === "Gender" || listing.genderPreference === gender;
+    const matchesGender =
+      gender === "Gender" || listing.genderPreference === gender;
 
     return matchesSearch && matchesBudget && matchesRoom && matchesGender;
   });
-
+  
   return (
     <div className="h-screen overflow-y-auto no-scrollbar">
       <Welcome />
@@ -110,10 +128,11 @@ function Dashboard() {
             ⭐ Recommended for You
           </h2>
           <span
-          onClick={()=>{
-            dispatch(setStudentView("All Listings"))
-          }}
-           className="text-[#F5A623] text-xs font-medium cursor-pointer hover:underline">
+            onClick={() => {
+              dispatch(setStudentView("All Listings"));
+            }}
+            className="text-[#F5A623] text-xs font-medium cursor-pointer hover:underline"
+          >
             See all
           </span>
         </div>
@@ -126,10 +145,20 @@ function Dashboard() {
             </div>
           ) : (
             filteredListings.map((listing) => (
-              <ListingCard key={listing._id} listing={listing} />
+              <ListingCard
+                key={listing._id}
+                listing={listing}
+                onClick={() => handleOpenModal(listing)}
+              />
             ))
           )}
         </div>
+        {open && (
+          <ListingDetails
+            listing={selectedListing}
+            onClose={handleCloseModal}
+          />
+        )}
       </div>
     </div>
   );
