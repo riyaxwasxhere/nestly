@@ -17,7 +17,7 @@ function BookVisitModal({ listing, onClose }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${serverUrl}/api/visit/requestVisit`,
+        `${serverUrl}/api/visits/requestVisit`,
         {
           listingId: listing._id,
           visitDate,

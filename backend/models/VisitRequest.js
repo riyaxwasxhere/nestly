@@ -28,8 +28,8 @@ const visitRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "accepted", "rejectes", "completed"],
-      default: "pending"
+      enum: ["Pending", "Accepted", "Rejected", "Completed"],
+      default: "Pending"
     }
   },
   { timestamps: true }

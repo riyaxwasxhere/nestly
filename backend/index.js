@@ -70,7 +70,7 @@ app.use("/api/user", userRouter);
 app.use("/api/listings", listingRouter);
 app.use("/api/conversations", convoRouter);
 app.use("/api/saved", savedRouter);
-app.use("/api/visit", visitRouter);
+app.use("/api/visits", visitRouter);
 
 app.use((err, req, res, next) => {
   console.log("GLOBAL ERROR:", err.message);

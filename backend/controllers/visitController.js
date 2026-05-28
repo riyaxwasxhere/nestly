@@ -58,6 +58,72 @@ export const requestVisit = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
+      message: "Internal server error!!"
+    });
+  }
+};
+
+export const getStudentVisitRequests = async (req, res) => {
+  try {
+    const studentId = req.user.id;
+    const visitRequests = await VisitRequest.find({
+      student: studentId
+    })
+      .populate("listing")
+      .populate("owner")
+      .sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      visitRequests
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+export const cancelVisitRequest = async (req, res) => {
+  try {
+    const studentId = req.user.id;
+    const { visitRequestId } = req.params;
+
+    const visitRequest = await VisitRequest.findById(
+      visitRequestId
+    );
+
+    if (!visitRequest) {
+      return res.status(404).json({
+        success: false,
+        message: "Visit request not found"
+      });
+    }
+
+    if (
+      visitRequest.student.toString() !== studentId
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    await VisitRequest.findByIdAndDelete(
+      visitRequestId
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Visit request cancelled successfully"
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
       message: "Internal server error"
     });
   }

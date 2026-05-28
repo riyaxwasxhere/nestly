@@ -77,10 +77,25 @@ function ListingCard({ listing, onClick }) {
         </div>
       </div>
       <div className="flex flex-col px-4 py-2">
-        <h3 className="text-sm font-semibold">{listing.title}</h3>
-        <p className="text-xs text-[#867a5f] font-medium">
-          📍{listing.address?.locality}, {listing.address?.city}
-        </p>
+        <div className="flex justify-between">
+          <div>
+            <h3 className="text-sm font-semibold">{listing.title}</h3>
+            <p className="text-xs text-[#867a5f] font-medium">
+              📍{listing.address?.locality}, {listing.address?.city}
+            </p>
+          </div>
+          <div>
+            <span
+            className={`px-4 backdrop-blur-md bg-black/30 border rounded-2xl flex items-center ${
+              listing.bookingStatus === "open"
+                ? "border-green-500 text-green-400"
+                : "border-red-500 text-red-400"
+            }`}
+          >
+            {listing.bookingStatus}
+          </span>
+          </div>
+        </div>
         <div className="flex items-center justify-between my-2">
           <p className="text-xs text-[#867a5f]">
             <span className="text-[#F5A623] font-bold text-[16px]">
@@ -88,7 +103,7 @@ function ListingCard({ listing, onClick }) {
             </span>
             /month
           </p>
-          <p className="font-mono text-sm ">{listing.genderPreference}</p>
+          <span className="text-xs text-[#d0cbbc] font-medium rounded-sm ">Gender : {listing.genderPreference}</span>
         </div>
       </div>
     </div>
