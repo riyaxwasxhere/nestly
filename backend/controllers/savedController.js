@@ -20,7 +20,12 @@ export const saveListing = async (req, res) => {
       savedListing: savedListingId
     });
 
-    const populatedSaved = await newSaved.populate("savedListing");
+    const populatedSaved = await newSaved.populate({
+      path: "savedListing",
+      populate: {
+        path: "owner"
+      }
+    });
 
     res.status(201).json(populatedSaved);
   } catch (error) {
@@ -35,7 +40,12 @@ export const getSavedListings = async (req, res) => {
     const userId = req.params.userId;
     const savedListings = await Saved.find({
       user: userId
-    }).populate("savedListing");
+    }).populate({
+      path: "savedListing",
+      populate: {
+        path: "owner"
+      }
+    });
     res.status(200).json(savedListings);
   } catch (error) {
     res.status(500).json({

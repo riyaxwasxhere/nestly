@@ -5,12 +5,25 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import { useDispatch } from "react-redux";
+import ListingDetails from "./ListingDetails";
 
 function Saved() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user?.userData);
   const currentUserId = currentUser?._id;
   const [savedListings, setSavedListings] = useState([]);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = (listing) => {
+    setSelectedListing(listing);
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    setSelectedListing(null);
+  };
 
   useEffect(() => {
     if (!currentUserId) return;
@@ -48,6 +61,7 @@ function Saved() {
             <SavedCard
               key={saved._id}
               savedListing={saved.savedListing}
+              onClick={() => handleOpenModal(saved.savedListing)}
               userId={currentUserId}
               onRemove={(id) => {
                 setSavedListings((prev) =>
@@ -60,6 +74,9 @@ function Saved() {
           <p className="text-sm text-[#867a5f]">No saved properties yet.</p>
         )}
       </div>
+      {open && (
+        <ListingDetails listing={selectedListing} onClose={handleCloseModal} />
+      )}
     </div>
   );
 }

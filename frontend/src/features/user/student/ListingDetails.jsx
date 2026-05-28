@@ -4,7 +4,7 @@ import ImageSlider from "./ImageSlider";
 
 function ListingDetails({ listing, onClose }) {
   if (!listing) return null;
-  console.log(listing);
+  console.log(listing.owner.fullname);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
       <div className="relative w-[90%] max-w-[1100px] max-h-[90vh] overflow-y-auto  no-scrollbar rounded-3xl bg-[#2a180a] p-6 shadow-2xl border">
@@ -119,7 +119,7 @@ function ListingDetails({ listing, onClose }) {
                 <Calendar /> Book Visit
               </div>
               <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
-                <House /> Book Property
+                <House /> Request Booking
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { serverUrl } from "../../../App";
 
-function SavedCard({ savedListing, userId, onRemove }) {
+function SavedCard({ savedListing, userId, onRemove, onClick }) {
   
   if (!savedListing) {
     return null;
@@ -44,10 +44,12 @@ function SavedCard({ savedListing, userId, onRemove }) {
           <p className="text-[#F4A523] font-bold font-mono">₹ {savedListing.pricePerMonth}/month</p>
         </div>
       </div>
-      <div className='flex items-center gap-2 '>
+      <div onClick={onClick} className='flex items-center gap-2 '>
         <button className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-[#F4A523] hover:text-[#F4A523] transition-all duration-200">View Details</button>
         <button
-        onClick={() => handleRemove()}
+        onClick={(e) => {
+          e.stopPropagation()
+          handleRemove()}}
          className="bg-[#0e0701] border border-[#3e2d05cc] px-3 py-1.5 rounded-lg text-xs text-[#867a5f] cursor-pointer font-medium hover:border-red-400 hover:text-red-400 transition-all duration-200">Remove</button>
       </div>
     </div>

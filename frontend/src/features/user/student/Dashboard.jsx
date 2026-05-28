@@ -125,7 +125,7 @@ function Dashboard() {
             style={{ fontFamily: "Playfair Display, serif" }}
             className="text-xl font-bold"
           >
-            ⭐ Recommended for You
+            ⭐ Latest Listings
           </h2>
           <span
             onClick={() => {

@@ -33,10 +33,10 @@ function Navbar() {
       label: "Recently Viewed",
       icon: "🕐"
     },
-    {
-      label: "Find Roommate",
-      icon: "👥"
-    },
+    // {
+    //   label: "Find Roommate",
+    //   icon: "👥"
+    // },
     {
       label: "Notifications",
       icon: "🔔"

@@ -10,7 +10,9 @@ function ListingCard({ listing, onClick }) {
   const dispatch = useDispatch();
   const currentUserId = useSelector((state) => state.user?.userData?._id);
   const savedListings = useSelector((state) => state.saved?.savedListings);
-  const isSaved = savedListings.some((item) => item.savedListing._id === listing._id);
+  const isSaved = savedListings.some(
+    (item) => item.savedListing._id === listing._id
+  );
 
   const handleSave = async () => {
     try {
@@ -42,7 +44,10 @@ function ListingCard({ listing, onClick }) {
   };
 
   return (
-    <div onClick={onClick} className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
+    <div
+      onClick={onClick}
+      className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300"
+    >
       <div className="relative">
         <div
           className="h-40 bg-center bg-cover rounded-t-xl"
@@ -61,7 +66,8 @@ function ListingCard({ listing, onClick }) {
             </span>
             <span
               className="p-1 text-[16px] border rounded-full bg-[#f5236d62] border-rose-500"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 handleSave();
               }}
             >
