@@ -1,15 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import { Calendar, House, MessageCircle, X } from "lucide-react";
 import ImageSlider from "./ImageSlider";
+import BookVisitModal from "./BookVisitModal";
 
 function ListingDetails({ listing, onClose }) {
+  const [open,setOpen] = useState(false)
   if (!listing) return null;
-  console.log(listing.owner.fullname);
+
+  const handleOpenModal = () => {
+    setOpen(true)
+  }
+  const handleCloseModal = () => {
+    setOpen(false)
+  }
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
       <div className="relative w-[90%] max-w-[1100px] max-h-[90vh] overflow-y-auto  no-scrollbar rounded-3xl bg-[#2a180a] p-6 shadow-2xl border">
         <div className="h-screen overflow-y-auto no-scrollbar">
-          <div className="relative overflow-hidden h-120 rounded-3xl">
+          <div className="relative overflow-hidden h-120 rounded-3xl bg-[#121001]/40">
             <div className="absolute top-0 left-0 z-50 flex items-center justify-between w-full px-6 py-4">
               <span
                 className={`px-4 py-1 backdrop-blur-md bg-black/30 border rounded-2xl ${
@@ -47,7 +56,7 @@ function ListingDetails({ listing, onClose }) {
                     ? `near ${listing.address.landmark}`
                     : ``}
                   , {listing.address.locality},{listing.address.city},
-                  {listing.address.state},{listing.address.pincode}{" "}
+                  {listing.address.state}-{listing.address.pincode}{" "}
                 </p>
               </div>
               <div className="flex flex-col items-end ">
@@ -115,7 +124,7 @@ function ListingDetails({ listing, onClose }) {
               <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
                 <MessageCircle /> Message
               </div>
-              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+              <div onClick={handleOpenModal} className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
                 <Calendar /> Book Visit
               </div>
               <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
@@ -123,6 +132,12 @@ function ListingDetails({ listing, onClose }) {
               </div>
             </div>
           </div>
+          {open && (
+            <BookVisitModal
+            listing={listing}
+            onClose ={handleCloseModal}
+             />
+          )}
         </div>
       </div>
     </div>

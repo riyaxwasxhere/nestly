@@ -10,6 +10,7 @@ import convoRouter from "./routes/convoRoutes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import savedRouter from "./routes/savedRouter.js";
+import visitRouter from "./routes/visitRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -69,6 +70,7 @@ app.use("/api/user", userRouter);
 app.use("/api/listings", listingRouter);
 app.use("/api/conversations", convoRouter);
 app.use("/api/saved", savedRouter);
+app.use("/api/visit", visitRouter);
 
 app.use((err, req, res, next) => {
   console.log("GLOBAL ERROR:", err.message);

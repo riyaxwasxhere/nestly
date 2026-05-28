@@ -42,7 +42,7 @@ function Saved() {
   }, [currentUserId, dispatch]);
 
   return (
-    <div className="px-10 py-8">
+    <div className="h-full px-10 pt-4 overflow-y-auto pb-30 no-scrollbar">
       <div className="flex items-center justify-between">
         <h2
           style={{ fontFamily: "Playfair Display, serif" }}
@@ -55,7 +55,7 @@ function Saved() {
         </span>
       </div>
 
-      <div className="flex flex-col h-screen gap-4 overflow-y-auto no-scrollbar">
+      <div className="flex flex-col gap-4 ">
         {savedListings.length > 0 ? (
           savedListings.map((saved) => (
             <SavedCard
