@@ -5,8 +5,6 @@ import AllListings from './AllListings'
 import Saved from './Saved'
 import Messages from './Messages'
 import ScheduledVisits from './ScheduledVisits'
-import RecentlyViewed from './RecentlyViewed'
-import FindRoommate from './FindRoommate'
 import Notifications from './Notifications'
 import Profile from './Profile'
 import HelpAndSupport from './HelpAndSupport'
@@ -27,8 +25,6 @@ function StudentLayout() {
         {activeView === "Saved" && <Saved />}
         {activeView === "Messages" && <Messages />}
         {activeView === "Scheduled Visits" && <ScheduledVisits />}
-        {activeView === "Recently Viewed" && <RecentlyViewed />}
-        {activeView === "Find Roommate" && <FindRoommate />}
         {activeView === "Notifications" && <Notifications />}
         {activeView === "Profile" && <Profile />}
         {activeView === "Help And Support" && <HelpAndSupport />}

@@ -16,7 +16,7 @@ function BookVisitModal({ listing, onClose }) {
   const handleSendRequest = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(
+      await axios.post(
         `${serverUrl}/api/visits/requestVisit`,
         {
           listingId: listing._id,
@@ -25,12 +25,10 @@ function BookVisitModal({ listing, onClose }) {
         },
         { withCredentials: true }
       );
-
-      console.log(response.data);
       alert("Visit request sent successfully");
       onClose();
     } catch (error) {
-      alert(error.response.data.message)
+      alert(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -78,16 +76,7 @@ function BookVisitModal({ listing, onClose }) {
         <button
           disabled={loading}
           onClick={handleSendRequest}
-          className="
-    w-full px-4 py-3
-    transition-all
-    border outline-none
-    cursor-pointer
-    bg-[#F5A623]/70
-    border-[#4a3720]
-    rounded-2xl
-    disabled:opacity-50
-  "
+          className=" w-full px-4 py-3 border outline-none cursor-pointer bg-[#F5A623]/70 border-[#4a3720] rounded-2xl disabled:opacity-50 "
         >
           {loading ? "Sending..." : "Request visit"}
         </button>
