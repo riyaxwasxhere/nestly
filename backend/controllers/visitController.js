@@ -1,12 +1,13 @@
 import Listing from "../models/Listing.js";
 import VisitRequest from "../models/VisitRequest.js";
+import { createNotification } from "./notificationController.js";
 
 export const requestVisit = async (req, res) => {
   try {
     const studentId = req.user.id;
     const { listingId, visitDate, message } = req.body;
     const listing = await Listing.findById(listingId);
-    if (!listingId) {
+    if (!listing) {
       return res.status(404).json({
         success: false,
         message: "Listing not found"
@@ -49,6 +50,17 @@ export const requestVisit = async (req, res) => {
       visitDate: selectedDate,
       message
     });
+
+    await createNotification({
+      recipient: listing.owner,
+      sender: req.user.id,
+      type: "visit_requested",
+      title: "New Visit Request",
+      message: `${req.user.fullname} requested a visit`,
+      relatedId: newVisitRequest._id,
+      relatedModel: "VisitRequest"
+    });
+
     return res.status(201).json({
       success: true,
       message: "Visit request sent successfully",
@@ -90,9 +102,7 @@ export const cancelVisitRequest = async (req, res) => {
     const studentId = req.user.id;
     const { visitRequestId } = req.params;
 
-    const visitRequest = await VisitRequest.findById(
-      visitRequestId
-    );
+    const visitRequest = await VisitRequest.findById(visitRequestId);
 
     if (!visitRequest) {
       return res.status(404).json({
@@ -101,24 +111,29 @@ export const cancelVisitRequest = async (req, res) => {
       });
     }
 
-    if (
-      visitRequest.student.toString() !== studentId
-    ) {
+    if (visitRequest.student.toString() !== studentId) {
       return res.status(403).json({
         success: false,
         message: "Unauthorized"
       });
     }
 
-    await VisitRequest.findByIdAndDelete(
-      visitRequestId
-    );
+    await VisitRequest.findByIdAndDelete(visitRequestId);
+
+    await createNotification({
+      recipient: visitRequest.owner,
+      sender: studentId,
+      type: "visit_cancelled",
+      title: "Visit Cancelled",
+      message: "A visit request has been cancelled",
+      relatedId: visitRequest._id,
+      relatedModel: "VisitRequest"
+    });
 
     return res.status(200).json({
       success: true,
       message: "Visit request cancelled successfully"
     });
-
   } catch (error) {
     console.log(error);
 
