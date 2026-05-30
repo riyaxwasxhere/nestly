@@ -119,7 +119,8 @@ function EditProfileModal({ profile, onClose }) {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          {profile.role === "student" && (
+            <div className="flex flex-col gap-2">
             <label className="text-xs uppercase text-[#867a5f] font-medium">
               institute
             </label>
@@ -132,6 +133,8 @@ function EditProfileModal({ profile, onClose }) {
               />
             </div>
           </div>
+          )}
+          
         </div>
         <div className="flex gap-2 mt-6 mb-2">
           <button
