@@ -15,13 +15,41 @@ function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const scrollRef = useRef();
+  console.log("conversation", conversations);
 
   const currentUser = useSelector((state) => state.user?.userData);
   const currentUserId = currentUser?._id;
-  
+  const selectedChat = useSelector((state) => state.user?.selectedChat);
+  console.log(selectedChat)
+
   const filteredConversations = conversations.filter((convo) =>
     convo?.receiverName?.toLowerCase().includes(search.toLowerCase())
   );
+
+  useEffect(() => {
+    if (!selectedChat || !currentUserId) return;
+    const startConversation = async () => {
+      try {
+        const response = await axios.post(
+          `${serverUrl}/api/conversations/create`,
+          {
+            senderId: currentUserId,
+            receiverId: selectedChat._id
+          },
+          { withCredentials: true }
+        );
+        setActiveConversation({
+          conversationId: response.data._id,
+          receiverId: selectedChat._id,
+          receiverName: selectedChat.fullname,
+          receiverProfilePic: selectedChat.receiverProfilePic
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    startConversation();
+  }, [selectedChat, currentUserId]);
 
   useEffect(() => {
     if (!currentUserId) return;
@@ -169,7 +197,6 @@ function Messages() {
       <div className="flex flex-col flex-1 h-screen overflow-hidden">
         {activeConversation ? (
           <div className="flex flex-col h-full">
-            
             {/* Header */}
             <div className="flex items-center gap-3 px-6 py-3 border-b border-[#4a3720] bg-[#1a0f05]/60">
               <div className="relative bg-white rounded-full w-9 h-9 shrink-0">
@@ -188,7 +215,9 @@ function Messages() {
                 <p className="text-sm font-semibold text-[#F0E8D8]">
                   {activeConversation?.receiverName}
                 </p>
-                <p className={`text-xs ${isOnline(activeConversation?.receiverId) ? "text-green-400" : "text-gray-500"}`}>
+                <p
+                  className={`text-xs ${isOnline(activeConversation?.receiverId) ? "text-green-400" : "text-gray-500"}`}
+                >
                   {isOnline(activeConversation?.receiverId)
                     ? "Online"
                     : "Offline"}

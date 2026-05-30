@@ -1,19 +1,29 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Calendar, House, MessageCircle, X } from "lucide-react";
 import ImageSlider from "./ImageSlider";
 import BookVisitModal from "./BookVisitModal";
+import { useDispatch } from "react-redux";
+import { setSelectedChat } from "../../../redux/userSlice";
+import { setStudentView } from "../../../redux/studentSlice";
 
 function ListingDetails({ listing, onClose }) {
-  const [open,setOpen] = useState(false)
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   if (!listing) return null;
 
   const handleOpenModal = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
   const handleCloseModal = () => {
-    setOpen(false)
-  }
-  
+    setOpen(false);
+  };
+  const handleMessage = () => {
+    console.log("Owner:", listing.owner);
+
+    dispatch(setSelectedChat(listing.owner));
+    dispatch(setStudentView("Messages"));
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs">
       <div className="relative w-[90%] max-w-[1100px] max-h-[90vh] overflow-y-auto  no-scrollbar rounded-3xl bg-[#2a180a] p-6 shadow-2xl border">
@@ -121,22 +131,25 @@ function ListingDetails({ listing, onClose }) {
             </div>
 
             <div className="grid grid-cols-3 gap-4 py-3">
-              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+              <button
+                onClick={handleMessage}
+                className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl"
+              >
                 <MessageCircle /> Message
-              </div>
-              <div onClick={handleOpenModal} className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+              </button>
+              <button
+                onClick={handleOpenModal}
+                className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl"
+              >
                 <Calendar /> Book Visit
-              </div>
-              <div className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
+              </button>
+              <button className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
                 <House /> Request Booking
-              </div>
+              </button>
             </div>
           </div>
           {open && (
-            <BookVisitModal
-            listing={listing}
-            onClose ={handleCloseModal}
-             />
+            <BookVisitModal listing={listing} onClose={handleCloseModal} />
           )}
         </div>
       </div>
