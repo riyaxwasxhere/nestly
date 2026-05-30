@@ -15,13 +15,10 @@ function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const scrollRef = useRef();
-  console.log("conversation", conversations);
 
   const currentUser = useSelector((state) => state.user?.userData);
   const currentUserId = currentUser?._id;
   const selectedChat = useSelector((state) => state.user?.selectedChat);
-  console.log(selectedChat)
-
   const filteredConversations = conversations.filter((convo) =>
     convo?.receiverName?.toLowerCase().includes(search.toLowerCase())
   );
@@ -42,7 +39,7 @@ function Messages() {
           conversationId: response.data._id,
           receiverId: selectedChat._id,
           receiverName: selectedChat.fullname,
-          receiverProfilePic: selectedChat.receiverProfilePic
+          receiverProfilePic: selectedChat.profilePic
         });
       } catch (error) {
         console.log(error);
@@ -102,6 +99,8 @@ function Messages() {
   }, [currentUserId]);
 
   useEffect(() => {
+    console.log(activeConversation);
+
     if (!activeConversation?.conversationId) return;
     const fetchMessages = async () => {
       try {
@@ -115,7 +114,7 @@ function Messages() {
       }
     };
     fetchMessages();
-  }, [activeConversation?.conversationId]);
+  }, [activeConversation]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -139,6 +138,17 @@ function Messages() {
         receiverId: activeConversation.receiverId,
         text: newMessage.trim()
       });
+      setConversations((prev) =>
+        prev.map((convo) =>
+          convo.conversationId === activeConversation.conversationId
+            ? {
+                ...convo,
+                lastMessage: newMessage.trim(),
+                lastMessageAt: new Date()
+              }
+            : convo
+        )
+      );
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -149,9 +159,9 @@ function Messages() {
     onlineUsers.some((user) => user.userId === userId);
 
   return (
-    <div className="flex">
+    <div className="flex flex-1 h-full overflow-hidden">
       {/* Conversation List */}
-      <div className="p-4 border-r w-72 border-[#5a4626] h-screen overflow-y-auto no-scrollbar">
+      <div className="p-4 border-r w-72 border-[#5a4626] h-full overflow-y-auto no-scrollbar">
         <input
           className="w-full px-4 py-3 mb-4 border border-[#4a3720] rounded-2xl text-xs focus:outline-none bg-[#2a1d0d]/80 text-[#F0E8D8]"
           type="text"
@@ -179,13 +189,22 @@ function Messages() {
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#413117] rounded-full"></div>
               )}
             </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium">{convo.receiverName}</p>
+            <div className="flex-1 ml-3">
+              <div className="flex justify-between">
+                <p className="text-sm font-medium">{convo.receiverName}</p>
+
+                <p className="text-[10px] text-gray-400">
+                  {convo.lastMessageAt
+                    ? new Date(convo.lastMessageAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                      })
+                    : ""}
+                </p>
+              </div>
+
               <p className="w-40 text-xs text-gray-500 truncate">
-                {messages.length > 0 &&
-                activeConversation?.conversationId === convo.conversationId
-                  ? messages[messages.length - 1]?.text
-                  : "No messages yet"}
+                {convo.lastMessage || "No messages yet"}
               </p>
             </div>
           </div>
@@ -194,9 +213,11 @@ function Messages() {
 
       {/* Message Area */}
 
-      <div className="flex flex-col flex-1 h-screen overflow-hidden">
+      <div className="flex flex-col flex-1 h-full min-h-0 overflow-hidden">
+        {" "}
         {activeConversation ? (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col flex-1 h-full min-h-0">
+            {" "}
             {/* Header */}
             <div className="flex items-center gap-3 px-6 py-3 border-b border-[#4a3720] bg-[#1a0f05]/60">
               <div className="relative bg-white rounded-full w-9 h-9 shrink-0">
@@ -228,9 +249,8 @@ function Messages() {
                 className="cursor-pointer text-[#F5A623]"
               />
             </div>
-
             {/* Messages */}
-            <div className="flex flex-col flex-1 gap-2 px-6 py-4 overflow-y-auto no-scrollbar">
+            <div className="flex flex-col flex-1 min-h-0 gap-2 px-6 py-4 overflow-y-auto no-scrollbar">
               {messages.map((msg, i) => {
                 const isSender = msg.senderId === currentUserId;
                 return (
@@ -249,7 +269,6 @@ function Messages() {
                 );
               })}
             </div>
-
             {/* Input */}
             <div className="flex items-center gap-2 px-6 py-3 border-t border-[#4a3720] bg-[#1a0f05]/60">
               <input

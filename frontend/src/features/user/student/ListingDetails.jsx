@@ -1,14 +1,35 @@
 import React, { useState } from "react";
-import { Calendar, House, MessageCircle, X } from "lucide-react";
+import { Blocks, Calendar, Delete, House, MessageCircle, X } from "lucide-react";
 import ImageSlider from "./ImageSlider";
 import BookVisitModal from "./BookVisitModal";
 import { useDispatch } from "react-redux";
 import { setSelectedChat } from "../../../redux/userSlice";
 import { setStudentView } from "../../../redux/studentSlice";
+import axios from "axios";
+import { serverUrl } from "../../../App";
+import { useEffect } from "react";
 
 function ListingDetails({ listing, onClose }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [requestId, setRequestId] = useState(null);
+  const [hasRequested, setHasRequested] = useState(false);
+  const listingId = listing._id;
+
+  useEffect(() => {
+    const checkRequest = async () => {
+      const response = await axios.get(
+        `${serverUrl}/api/booking/check/${listingId}`,
+        { withCredentials: true }
+      );
+
+      setHasRequested(response.data.hasRequested);
+      setRequestId(response.data.requestId);
+    };
+
+    checkRequest();
+  }, [listingId]);
+
   if (!listing) return null;
 
   const handleOpenModal = () => {
@@ -18,10 +39,40 @@ function ListingDetails({ listing, onClose }) {
     setOpen(false);
   };
   const handleMessage = () => {
-    console.log("Owner:", listing.owner);
-
     dispatch(setSelectedChat(listing.owner));
     dispatch(setStudentView("Messages"));
+  };
+
+  const handleBookingRequest = async () => {
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/booking/request`,
+        {
+          listingId: listing._id
+        },
+        { withCredentials: true }
+      );
+      alert("Booking request sent")
+      setHasRequested(true);
+      setRequestId(response.data.requestId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCancelRequest = async () => {
+    try {
+      await axios.delete(
+        `${serverUrl}/api/booking/cancel/${requestId}`,
+        { withCredentials: true }
+      );
+            alert("Booking request cancelled!")
+
+      setHasRequested(false);
+      setRequestId(null);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -133,21 +184,24 @@ function ListingDetails({ listing, onClose }) {
             <div className="grid grid-cols-3 gap-4 py-3">
               <button
                 onClick={handleMessage}
-                className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl"
+                className="flex items-center justify-center gap-2 py-3 bg-[#F5A623]/70 border cursor-pointer rounded-xl"
               >
                 <MessageCircle /> Message
               </button>
               <button
                 onClick={handleOpenModal}
-                className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl"
+                className="flex items-center justify-center bg-[#F5A623]/70 gap-2 py-3 border cursor-pointer rounded-xl"
               >
                 <Calendar /> Book Visit
               </button>
-              <button className="flex items-center justify-center gap-2 py-3 border cursor-pointer rounded-xl">
-                <House /> Request Booking
-              </button>
+              {hasRequested ? (
+                <button onClick={handleCancelRequest} className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-red-500/40 rounded-xl"><Delete />Cancel Request</button>
+              ) : (
+                <button onClick={handleBookingRequest} className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-[#F5A623]/70 rounded-xl"><House />Request Booking</button>
+              )}
             </div>
           </div>
+          
           {open && (
             <BookVisitModal listing={listing} onClose={handleCloseModal} />
           )}

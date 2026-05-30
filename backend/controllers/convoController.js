@@ -1,4 +1,3 @@
-import e from "express";
 import Conversations from "../models/Conversations.js";
 import Messages from "../models/Messages.js";
 import User from "../models/User.js";
@@ -41,7 +40,9 @@ export const getUserConversations = async (req, res) => {
         conversationId: convo._id,
         receiverId: receiver._id,
         receiverName: receiver.fullname,
-        receiverProfilePic: receiver.profilePic
+        receiverProfilePic: receiver.profilePic,
+        lastMessage: convo.lastMessage,
+        lastMessageAt: convo.lastMessageAt
       };
     });
     const result = await Promise.all(convoUserData);
@@ -70,6 +71,10 @@ export const addMessage = async (req, res) => {
       text
     });
     const savedMessage = await newMessage.save();
+    await Conversations.findByIdAndUpdate(conversationId, {
+      lastMessage: text,
+      lastMessageAt: new Date()
+    });
     res.status(200).json(savedMessage);
   } catch (error) {
     res.status(500).json(error);

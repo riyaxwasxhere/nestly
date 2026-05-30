@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const visitRequestSchema = new mongoose.Schema(
+const bookingRequestSchema = new mongoose.Schema(
   {
     student: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,32 +17,28 @@ const visitRequestSchema = new mongoose.Schema(
       ref: "Listing",
       required: true
     },
-    visitDate: {
-      type: Date,
-      required: true
-    },
-    message: {
-      type: String,
-      trim: true,
-      default: ""
-    },
     status: {
       type: String,
-      enum: ["Pending", "Accepted", "Rejected", "Cancelled", "Completed"],
+      enum: ["Pending", "Accepted", "Rejected", "Cancelled"],
       default: "Pending"
     }
   },
   { timestamps: true }
 );
 
-visitRequestSchema.index(
+bookingRequestSchema.index(
   {
     student: 1,
     listing: 1,
-    visitDate: 1
+    status: 1
   },
-  { unique: true }
+  {
+    unique: true,
+    partialFilterExpression: {
+      status: "Pending"
+    }
+  }
 );
 
-const VisitRequest = mongoose.model("VisitRequest", visitRequestSchema);
-export default VisitRequest;
+const BookingRequest = mongoose.model("BookingRequest", bookingRequestSchema);
+export default BookingRequest;

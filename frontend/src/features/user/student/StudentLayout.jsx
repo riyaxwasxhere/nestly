@@ -18,7 +18,7 @@ function StudentLayout() {
       <div className="flex h-screen overflow-hidden">
         <Navbar />
       </div>
-      <div className="flex-1 h-screen overflow-hidden">
+      <div className="flex flex-col flex-1 h-screen overflow-hidden">
         <Header />
         {activeView === "Dashboard" && <Dashboard />}
         {activeView === "All Listings" && <AllListings />}
