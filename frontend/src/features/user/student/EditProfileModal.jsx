@@ -65,7 +65,7 @@ function EditProfileModal({ profile, onClose }) {
           />
         </div>
         <p className="text-xs uppercase text-[#867a5f] font-medium mb-2">
-          Update Profile Picture
+          Profile Picture
         </p>
         <div className="flex justify-center">
           <div className="h-52 w-52 flex  border-[#58390dc9] border bg-[#140d07]">

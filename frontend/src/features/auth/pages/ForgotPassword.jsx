@@ -65,7 +65,7 @@ function ForgotPassword() {
         { email, otp: otp.join("") },
         { withCredentials: true }
       );
-      
+
       dispatch(setFpStep(3));
       console.log("OTP verified successfully: ", response.data);
       setError("");
@@ -239,13 +239,6 @@ function ForgotPassword() {
                 </p>
               </div>
               <div className="flex justify-center gap-3 mb-6 ">
-                {/* <input
-                  value={otp[0]}
-                  onChange={(e) => handleOtpChange(e.target.value, 0)}
-                  maxLength={1}
-                  type="text"
-                  className="h-16 text-xl bg-[#2A1F12] border-[#573605] font-bold text-center  border w-14 rounded-xl text-[#DC901C] outline-0  transition-all duration-150 "
-                /> */}
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -261,7 +254,10 @@ function ForgotPassword() {
               </div>
               <p className="text-[#8c7c66] text-center text-xs">
                 Didn't receive the code?{" "}
-                <span className="text-[#DC901C] font-medium cursor-pointer">
+                <span
+                  onClick={() => handleSendOtp()}
+                  className="text-[#DC901C] font-medium cursor-pointer"
+                >
                   Resend Code
                 </span>
               </p>

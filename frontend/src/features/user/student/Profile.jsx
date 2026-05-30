@@ -14,10 +14,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import EditProfileModal from "./EditProfileModal";
 import LogoutModal from "./LogoutModal";
+import ChangePassModal from "./ChangePassModal";
+import axios from "axios";
+import { serverUrl } from "../../../App";
 
 function Profile() {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [logOutOpen, setLogOutOpen] = useState(false);
+  const [changePassOpen, setChangePassOpen] = useState(false);
+
   const currentUser = useSelector((state) => state.user?.userData);
   const studentInstitute = useSelector((state) => state.student?.institution);
 
@@ -32,6 +37,25 @@ function Profile() {
   };
   const closeLogoutModal = () => {
     setLogOutOpen(false);
+  };
+  const openChangePassModal = () => {
+    handleSendOtp();
+    setChangePassOpen(true);
+  };
+  const closeChangePassModal = () => {
+    setChangePassOpen(false);
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      await axios.post(
+        `${serverUrl}/api/auth/send-otp`,
+        { email: currentUser?.email },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -129,20 +153,24 @@ function Profile() {
           >
             <Pencil className="text-[#867a5f]" size={18} /> Edit Profile
           </button>
-          <button className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer">
+          <button
+            onClick={openChangePassModal}
+            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer"
+          >
             <Lock className="text-[#867a5f]" size={18} /> Change Password
           </button>
-          <button onClick={openLogoutModal} className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer">
+          <button
+            onClick={openLogoutModal}
+            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer"
+          >
             <LogOut className="text-[#867a5f]" size={18} /> Logout
           </button>
         </div>
         {editProfileOpen && (
           <EditProfileModal onClose={handleCloseModal} profile={currentUser} />
         )}
-        {logOutOpen && (
-          <LogoutModal onClose={closeLogoutModal} />
-        )}
-        
+        {logOutOpen && <LogoutModal onClose={closeLogoutModal} />}
+        {changePassOpen && <ChangePassModal handleSendOtp={handleSendOtp} onClose={closeChangePassModal} />}
       </div>
     </div>
   );
