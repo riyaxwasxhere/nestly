@@ -73,7 +73,7 @@ function SignInForm() {
         { withCredentials: true }
       );
       console.log("Google authentication successful:", result.data);
-      dispatch(setUserData(result.data));
+      dispatch(setUserData(result.data.user));
       if(result.data.user.role === "owner"){
         navigate("/owner/dashboard")
       }else{

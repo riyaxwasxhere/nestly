@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Section from "./Section";
 import Field from "./Field";
 import { serverUrl } from "../../../App";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearEditListing, setOwnerView } from "../../../redux/ownerSlice";
 
 const amenitiesList = [
   "WiFi",
@@ -20,7 +20,7 @@ const amenitiesList = [
 ];
 
 function AddListing() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const editListing = useSelector((state) => state.owner.editListing);
 
   const [form, setForm] = useState({
@@ -46,6 +46,9 @@ function AddListing() {
 
   const [photos, setPhotos] = useState([]);
   const [previews, setPreviews] = useState(editListing?.photos || []);
+  const [remainingPhotos, setRemainingPhotos] = useState(
+    editListing?.photos || []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [detecting, setDetecting] = useState(false);
@@ -72,8 +75,13 @@ function AddListing() {
 
   const handlePhotos = (e) => {
     const files = Array.from(e.target.files);
-    setPhotos(files);
-    setPreviews(files.map((f) => URL.createObjectURL(f)));
+
+    setPhotos((prev) => [...prev, ...files]);
+
+    setPreviews((prev) => [
+      ...prev,
+      ...files.map((f) => URL.createObjectURL(f))
+    ]);
   };
 
   const detectLocation = () => {
@@ -142,6 +150,7 @@ function AddListing() {
       formData.append("bookingStatus", form.bookingStatus);
       formData.append("amenities", JSON.stringify(form.amenities));
       formData.append("location", JSON.stringify(form.location));
+      formData.append("existingPhotos", JSON.stringify(remainingPhotos));
       photos.forEach((photo) => formData.append("photos", photo));
 
       if (editListing) {
@@ -181,6 +190,9 @@ function AddListing() {
 
       setPhotos([]);
       setPreviews([]);
+
+      dispatch(clearEditListing());
+      dispatch(setOwnerView("Dashboard"));
 
       alert("Post Created");
     } catch (err) {
@@ -437,15 +449,10 @@ function AddListing() {
 
                 <button
                   onClick={() => {
-                    const updatedPreviews = previews.filter(
-                      (_, index) => index !== i
-                    );
+                    const updated = previews.filter((_, index) => index !== i);
 
-                    setPreviews(updatedPreviews);
-
-                    if (editListing) {
-                      editListing.photos = updatedPreviews;
-                    }
+                    setPreviews(updated);
+                    setRemainingPhotos(updated);
                   }}
                   className="absolute w-5 h-5 text-xs text-white bg-red-600 rounded-full cursor-pointer top-1 right-1"
                 >
@@ -463,7 +470,10 @@ function AddListing() {
 
       <div className="flex justify-end gap-4 pb-8">
         <button
-          onClick={() => navigate("/owner/dashboard")}
+          onClick={() => {
+            dispatch(clearEditListing());
+            dispatch(setOwnerView("Dashboard"));
+          }}
           className="border border-[#3d2b0f] rounded-xl px-6 py-3 text-sm text-[#7a5c30] cursor-pointer hover:border-[#F5A623] transition-all"
         >
           Cancel

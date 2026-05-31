@@ -23,7 +23,7 @@ function Profile() {
   const [logOutOpen, setLogOutOpen] = useState(false);
   const [changePassOpen, setChangePassOpen] = useState(false);
 
-  const currentUser = useSelector((state) => state.user?.userData?.user);
+  const currentUser = useSelector((state) => state.user?.userData);
 
   const handleOpenModal = () => {
     setEditProfileOpen(true);

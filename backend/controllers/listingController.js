@@ -61,12 +61,16 @@ export const updateListing = async (req, res) => {
       foodIncluded,
       bookingStatus,
       amenities,
-      location
+      location,
+      existingPhotos
     } = req.body;
 
     const parsedAddress = JSON.parse(address);
     const parsedAmenities = amenities ? JSON.parse(amenities) : [];
     const parsedLocation = location ? JSON.parse(location) : null;
+    const parsedExistingPhotos = existingPhotos
+      ? JSON.parse(existingPhotos)
+      : [];
 
     const existingListing = await Listing.findById(req.params.id);
 
@@ -76,11 +80,9 @@ export const updateListing = async (req, res) => {
       });
     }
 
-    let photos = existingListing.photos || [];
+    const newPhotos = req.files ? req.files.map((file) => file.path) : [];
 
-if (req.files && req.files.length > 0) {
-  photos = req.files.map((file) => file.path);
-}
+    const photos = [...parsedExistingPhotos, ...newPhotos];
 
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
@@ -117,7 +119,9 @@ if (req.files && req.files.length > 0) {
 
 export const getOwnerListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ owner: req.user._id }).populate("owner");
+    const listings = await Listing.find({ owner: req.user._id }).populate(
+      "owner"
+    );
     res.status(200).json(listings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching listings" });
@@ -126,7 +130,9 @@ export const getOwnerListings = async (req, res) => {
 
 export const getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ bookingStatus: "open" }).populate("owner");
+    const listings = await Listing.find({ bookingStatus: "open" }).populate(
+      "owner"
+    );
     res.status(200).json(listings);
   } catch (error) {
     res.status(500).json({ message: "Error fetching listings" });

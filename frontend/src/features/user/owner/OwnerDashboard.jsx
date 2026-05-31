@@ -62,7 +62,7 @@ function OwnerDashboard() {
           className="flex-1 px-4 py-2 border-2 border-[#413117] rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#F5A623] bg-[#342310]/20 text-[#F0E8D8] placeholder-[#867a5f]"
            type="text" placeholder="Search your property" />
         </div>
-        <div className="grid grid-cols-4 gap-4 pb-32">
+        <div className="grid grid-cols-4 gap-4 pb-10">
           {loading ? (
             <p className="text-[#5a4626] text-sm">Loading...</p>
           ) : filteredListings.length === 0 ? (

@@ -53,8 +53,6 @@ function SignupForm() {
     if (!role) errors.role = "Please select a role";
     if (!fullName.trim()) errors.fullName = "Full name is required";
     if (!email.trim()) errors.email = "Email address is required";
-    // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]$/.test(email))
-    //   errors.email = "Please enter a valid email address";
     if (!mobile.trim()) errors.mobile = "Mobile number is required";
     else if (!/^\+?[0-9\s]{10,15}$/.test(mobile))
       errors.mobile = "Please enter a valid mobile number";
@@ -85,7 +83,7 @@ function SignupForm() {
         },
         { withCredentials: true }
       );
-      dispatch(setUserData(response.data));
+      dispatch(setUserData(response.data.user));
       if(response.data.user.role === "owner"){
         navigate("/owner/dashboard")
       }else{
@@ -129,7 +127,7 @@ function SignupForm() {
         { withCredentials: true }
       );
       console.log("Google authentication successful:", result.data);
-      dispatch(setUserData(result.data));
+      dispatch(setUserData(result.data.user));
       if (result.data.user.role === "owner") {
         navigate("/owner/dashboard");
       } else {

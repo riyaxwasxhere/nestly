@@ -1,26 +1,26 @@
-import React from 'react'
-import Navbar from './Navbar'
-import Header from '../student/Header'
-import { useSelector } from 'react-redux'
-import OwnerDashboard from './OwnerDashboard'
-import MyListings from './MyListings'
-import Tenants from './Tenants'
-import Messages from './Messages'
-import ScheduledVisits from './ScheduledVisits'
-import Notifications from './Notifications'
-import Profile from './Profile'
-import HelpAndSupport from './HelpAndSupport'
-import AddListing from './AddListing'
+import React from "react";
+import Navbar from "./Navbar";
+import Header from "../student/Header";
+import { useSelector } from "react-redux";
+import OwnerDashboard from "./OwnerDashboard";
+import MyListings from "./MyListings";
+import Tenants from "./Tenants";
+import Messages from "./Messages";
+import ScheduledVisits from "./ScheduledVisits";
+import Notifications from "./Notifications";
+import Profile from "./Profile";
+import HelpAndSupport from "./HelpAndSupport";
+import AddListing from "./AddListing";
 
 function OwnerLayout() {
-  const activeView = useSelector((state) => state.owner.ownerView)
-  
+  const activeView = useSelector((state) => state.owner.ownerView);
+
   return (
     <div className="bg-[#0E0A07] text-[#F0E8D8] flex ">
       <div className="flex h-screen overflow-hidden">
         <Navbar />
       </div>
-      <div className="flex-1 h-screen overflow-hidden">
+      <div className="flex flex-col flex-1 h-screen overflow-hidden">
         <Header />
         {activeView === "Dashboard" && <OwnerDashboard />}
         {activeView === "My Listings" && <MyListings />}
@@ -33,7 +33,7 @@ function OwnerLayout() {
         {activeView === "Help And Support" && <HelpAndSupport />}
       </div>
     </div>
-  )
+  );
 }
 
-export default OwnerLayout
+export default OwnerLayout;

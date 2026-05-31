@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../../components/ui/Logo";
-import { setOwnerView } from "../../../redux/ownerSlice";
+import { clearEditListing, setOwnerView } from "../../../redux/ownerSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user?.userData?.user);
+  const user = useSelector((state) => state.user?.userData);
   const city = useSelector((state) => state.user?.city);
-  const ownerView = useSelector((state)=> state.owner?.ownerView)
+  const ownerView = useSelector((state) => state.owner?.ownerView);
   const navItems = [
     {
       label: "Dashboard",
@@ -21,16 +21,16 @@ function Navbar() {
       icon: "➕"
     },
     {
-      label: "Tenants",
-      icon: "👥"
-    },
-    {
       label: "Messages",
       icon: "💬"
     },
     {
-      label: "Scheduled Visits",
+      label: "Visit Requests",
       icon: "📅"
+    },
+    {
+      label: "Booking Requests",
+      icon: "🤝"
     },
     {
       label: "Notifications",
@@ -57,6 +57,9 @@ function Navbar() {
             {navItems.map((item) => (
               <div
                 onClick={() => {
+                  if (item.label === "Add Listing") {
+                    dispatch(clearEditListing());
+                  }
                   dispatch(setOwnerView(item.label));
                 }}
                 className={`flex text-sm items-center gap-3 text-[#F0E8D8] font-medium py-3 px-4 cursor-pointer ${ownerView === item.label ? "bg-[#f5a52320] text-[#F5A623] rounded-lg border border-[#764d0c] hover:bg-[#f5a52340] hover:border-[#f5a52340] transition-all duration-100" : "hover:bg-[#f5a52320] hover:border-[#f5a52320] transition-all duration-100 rounded-lg border border-transparent"}`}
@@ -69,12 +72,23 @@ function Navbar() {
         </div>
       </div>
       <div className="flex items-center gap-3 px-3 mb-5 cursor-pointer">
-        <div className="bg-[#F5A623] w-8 h-8 rounded-full flex items-center justify-around text-lg font-bold">
-          {user?.fullname?.[0] || "U"}
+        <div className="w-8 h-8 overflow-hidden rounded-full ">
+          {user?.profilePic ? (
+            <img src={user.profilePic} className="object-cover w-full h-full" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-[#F4A523]">
+              <span className="text-2xl font-semibold">
+                {user?.fullname?.charAt(0)}
+              </span>
+            </div>
+          )}
         </div>
+
         <div>
           <h3 className="text-sm">{user?.fullname || "user"}</h3>
-          <p className="text-xs">{user?.role || "role"} · {city || "city"}</p>
+          <p className="text-xs">
+            {user?.role || "role"} · {city || "city"}
+          </p>
         </div>
       </div>
     </div>
