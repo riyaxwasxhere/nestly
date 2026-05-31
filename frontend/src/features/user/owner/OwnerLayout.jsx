@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import OwnerDashboard from "./OwnerDashboard";
 import MyListings from "./MyListings";
 import Tenants from "./Tenants";
-import Messages from "./Messages";
+import Messages from "../student/Messages";
 import ScheduledVisits from "./ScheduledVisits";
 import Notifications from "./Notifications";
 import Profile from "./Profile";
