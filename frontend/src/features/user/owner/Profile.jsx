@@ -59,7 +59,12 @@ function Profile() {
 
   return (
     <div className="h-full px-10 py-4 overflow-y-auto pb-30 no-scrollbar ">
-      <h2 className="text-xl font-semibold">👤 My Profile</h2>
+      <h2
+        style={{ fontFamily: "Playfair Display, serif" }}
+        className="text-xl font-bold"
+      >
+        👤 My Profile
+      </h2>
       <p className="mt-1 text-sm text-[#867a5f]">
         Manage your personal information and account settings
       </p>
@@ -128,7 +133,6 @@ function Profile() {
             </div>
           </div>
         </div>
-        
       </div>
 
       <div className="bg-[#1f160f] p-10 px-26 justify-between rounded-xl border border-[#58390dc9] mt-4">
@@ -161,7 +165,12 @@ function Profile() {
           <EditProfileModal onClose={handleCloseModal} profile={currentUser} />
         )}
         {logOutOpen && <LogoutModal onClose={closeLogoutModal} />}
-        {changePassOpen && <ChangePassModal handleSendOtp={handleSendOtp} onClose={closeChangePassModal} />}
+        {changePassOpen && (
+          <ChangePassModal
+            handleSendOtp={handleSendOtp}
+            onClose={closeChangePassModal}
+          />
+        )}
       </div>
     </div>
   );

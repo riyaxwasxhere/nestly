@@ -143,3 +143,27 @@ export const cancelVisitRequest = async (req, res) => {
     });
   }
 };
+
+export const getOwnerVisitRequests = async (req, res) => {
+  try {
+    const ownerId = req.user.id;
+
+    const visitRequests = await VisitRequest.find({
+      owner: ownerId
+    })
+      .populate("student")
+      .populate("listing")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      visitRequests
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};

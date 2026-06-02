@@ -138,3 +138,30 @@ export const getAllListings = async (req, res) => {
     res.status(500).json({ message: "Error fetching listings" });
   }
 };
+
+export const deleteListing = async (req,res) => {
+  try {
+    const listingId = req.params.id
+    const listing  = await Listing.findById(listingId)
+    if (!listing){
+      return res.status(404).json({
+        success: false,
+        message: "Listing not found"
+      })
+    }
+    await Saved.deleteMany({
+  savedListing: listingId
+});
+    await listing.deleteOne()
+    return res.status(200).json({
+      success: true,
+      message: "Listing deleted successfully"
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server Error"
+    })
+  }
+}

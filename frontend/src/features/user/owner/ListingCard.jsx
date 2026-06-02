@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setEditListing, setOwnerView } from "../../../redux/ownerSlice";
 
-function ListingCard({ listing }) {
+function ListingCard({ listing, onClick }) {
   const [statusOpen, setStatusOpen] = useState(
     listing.bookingStatus === "open"
   );
   const dispatch = useDispatch();
   return (
-    <div className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
+    <div
+    onClick={onClick}
+    className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
       <div className="relative">
         <div
           className="h-40 bg-center bg-cover rounded-t-xl"
@@ -43,7 +45,8 @@ function ListingCard({ listing }) {
             /month
           </p>
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(setOwnerView("Add Listing"));
               dispatch(setEditListing(listing))
             }}

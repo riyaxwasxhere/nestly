@@ -6,11 +6,12 @@ import OwnerDashboard from "./OwnerDashboard";
 import MyListings from "./MyListings";
 import Tenants from "./Tenants";
 import Messages from "../student/Messages";
-import ScheduledVisits from "./ScheduledVisits";
 import Notifications from "./Notifications";
 import Profile from "./Profile";
 import HelpAndSupport from "./HelpAndSupport";
 import AddListing from "./AddListing";
+import VisitRequests from "./VisitRequests";
+import BookingRequests from "./BookingRequests";
 
 function OwnerLayout() {
   const activeView = useSelector((state) => state.owner.ownerView);
@@ -27,7 +28,8 @@ function OwnerLayout() {
         {activeView === "Add Listing" && <AddListing />}
         {activeView === "Tenants" && <Tenants />}
         {activeView === "Messages" && <Messages />}
-        {activeView === "Scheduled Visits" && <ScheduledVisits />}
+        {activeView === "Visit Requests" && <VisitRequests />}
+        {activeView === "Booking Requests" && <BookingRequests />}
         {activeView === "Notifications" && <Notifications />}
         {activeView === "Profile" && <Profile />}
         {activeView === "Help And Support" && <HelpAndSupport />}

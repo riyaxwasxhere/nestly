@@ -11,7 +11,7 @@ function ListingCard({ listing, onClick }) {
   const currentUserId = useSelector((state) => state.user?.userData?._id);
   const savedListings = useSelector((state) => state.saved?.savedListings);
   const isSaved = savedListings.some(
-    (item) => item.savedListing._id === listing._id
+    (item) => item.savedListing?._id === listing._id
   );
 
   const handleSave = async () => {
@@ -27,6 +27,7 @@ function ListingCard({ listing, onClick }) {
             withCredentials: true
           }
         );
+        console.log(savedListings);
         dispatch(addToSavedListings(response.data));
       } else {
         await axios.delete(`${serverUrl}/api/saved/remove`, {

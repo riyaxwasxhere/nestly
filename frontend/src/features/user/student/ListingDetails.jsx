@@ -1,20 +1,42 @@
 import React, { useState } from "react";
-import { Blocks, Calendar, Delete, House, MessageCircle, X } from "lucide-react";
+import {
+  Blocks,
+  Calendar,
+  Delete,
+  House,
+  MessageCircle,
+  Trash,
+  X
+} from "lucide-react";
 import ImageSlider from "./ImageSlider";
 import BookVisitModal from "./BookVisitModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedChat } from "../../../redux/userSlice";
 import { setStudentView } from "../../../redux/studentSlice";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import { useEffect } from "react";
 
-function ListingDetails({ listing, onClose }) {
+function ListingDetails({ listing, onClose, onDeleteSuccess }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState(null);
   const [hasRequested, setHasRequested] = useState(false);
   const listingId = listing._id;
+  const user = useSelector((state) => state.user?.userData);
+  
+  const handleDeleteListing = async () => {
+    try {
+      await axios.delete(`${serverUrl}/api/listings/delete/${listingId}`, {
+        withCredentials: true
+      });
+
+      onDeleteSuccess(listingId);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const checkRequest = async () => {
@@ -52,7 +74,7 @@ function ListingDetails({ listing, onClose }) {
         },
         { withCredentials: true }
       );
-      alert("Booking request sent")
+      alert("Booking request sent");
       setHasRequested(true);
       setRequestId(response.data.requestId);
     } catch (error) {
@@ -62,11 +84,10 @@ function ListingDetails({ listing, onClose }) {
 
   const handleCancelRequest = async () => {
     try {
-      await axios.delete(
-        `${serverUrl}/api/booking/cancel/${requestId}`,
-        { withCredentials: true }
-      );
-            alert("Booking request cancelled!")
+      await axios.delete(`${serverUrl}/api/booking/cancel/${requestId}`, {
+        withCredentials: true
+      });
+      alert("Booking request cancelled!");
 
       setHasRequested(false);
       setRequestId(null);
@@ -161,10 +182,15 @@ function ListingDetails({ listing, onClose }) {
 
             <div className="flex items-center justify-between py-3 ">
               <div className="flex gap-2">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#F5A623]">
-                  {listing.owner?.fullname?.[0]?.[0]}
-                  {listing.owner?.fullname?.split(" ")[1]?.[0]}
-                  {listing.owner?.fullname?.split(" ")[2]?.[0]}
+                <div className="bg-[#F5A623] w-8 h-8 rounded-full flex items-center justify-around text-lg font-bold">
+                  {user?.profilePic ? (
+                    <img
+                      className="flex items-center w-8 h-8 rounded-full"
+                      src={user?.profilePic}
+                    />
+                  ) : (
+                    <p>{user?.fullname[0] || "U"}</p>
+                  )}
                 </div>
                 <div className="flex flex-col ">
                   <h3 className="text-lg">{listing.owner?.fullname}</h3>
@@ -181,27 +207,49 @@ function ListingDetails({ listing, onClose }) {
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 py-3">
+            {user?.role === "student" ? (
+              <div className="grid grid-cols-3 gap-4 py-3">
+                <button
+                  onClick={handleMessage}
+                  className="flex items-center justify-center gap-2 py-3 bg-[#F5A623]/70 border cursor-pointer rounded-xl"
+                >
+                  <MessageCircle /> Message
+                </button>
+                <button
+                  onClick={handleOpenModal}
+                  className="flex items-center justify-center bg-[#F5A623]/70 gap-2 py-3 border cursor-pointer rounded-xl"
+                >
+                  <Calendar /> Book Visit
+                </button>
+                {hasRequested ? (
+                  <button
+                    onClick={handleCancelRequest}
+                    className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-red-500/40 rounded-xl"
+                  >
+                    <Delete />
+                    Cancel Request
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleBookingRequest}
+                    className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-[#F5A623]/70 rounded-xl"
+                  >
+                    <House />
+                    Request Booking
+                  </button>
+                )}
+              </div>
+            ) : (
               <button
-                onClick={handleMessage}
-                className="flex items-center justify-center gap-2 py-3 bg-[#F5A623]/70 border cursor-pointer rounded-xl"
+                onClick={handleDeleteListing}
+                className="flex items-center justify-center w-full gap-4 px-4 py-3 mt-4 border cursor-pointer bg-red-600/40 rounded-xl"
               >
-                <MessageCircle /> Message
+                {" "}
+                <Trash /> Delete post
               </button>
-              <button
-                onClick={handleOpenModal}
-                className="flex items-center justify-center bg-[#F5A623]/70 gap-2 py-3 border cursor-pointer rounded-xl"
-              >
-                <Calendar /> Book Visit
-              </button>
-              {hasRequested ? (
-                <button onClick={handleCancelRequest} className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-red-500/40 rounded-xl"><Delete />Cancel Request</button>
-              ) : (
-                <button onClick={handleBookingRequest} className="flex items-center justify-center gap-2 py-3 border cursor-pointer bg-[#F5A623]/70 rounded-xl"><House />Request Booking</button>
-              )}
-            </div>
+            )}
           </div>
-          
+
           {open && (
             <BookVisitModal listing={listing} onClose={handleCloseModal} />
           )}
