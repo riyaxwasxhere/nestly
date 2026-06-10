@@ -15,7 +15,7 @@ function VisitCard({ visitRequest, onCancel }) {
   if (!visitRequest) return null;
 
   return (
-    <div className="flex bg-[#2a180a] rounded-2xl h-40">
+    <div className="flex bg-[#2a180a] rounded-2xl ">
       <div className="overflow-hidden w-50 rounded-2xl bg-[#121001]/40">
         <img src={post?.photos?.[0]} className="object-cover w-full h-full" />
       </div>

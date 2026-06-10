@@ -167,3 +167,36 @@ export const getOwnerVisitRequests = async (req, res) => {
     });
   }
 };
+
+export const updateRequestStatus = async (req, res) => {
+  try {
+    const ownerId = req.user.id;
+    const visitId = req.params.id;
+    const { status } = req.body;
+
+    const visit = await VisitRequest.findById(visitId);
+    if (!visit) {
+      return res.status(404).json({
+        success: false,
+        message: "Visit request not found"
+      });
+    }
+    if (visit.owner.toString() !== ownerId) {
+      return req.status(403).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+    visit.status = status;
+    await visit.save();
+    return res.status(200).json({
+      success: true,
+      visit
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};

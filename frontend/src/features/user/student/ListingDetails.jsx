@@ -41,7 +41,7 @@ function ListingDetails({ listing, onClose, onDeleteSuccess }) {
   useEffect(() => {
     const checkRequest = async () => {
       const response = await axios.get(
-        `${serverUrl}/api/booking/check/${listingId}`,
+        `${serverUrl}/api/bookings/check/${listingId}`,
         { withCredentials: true }
       );
 
@@ -68,7 +68,7 @@ function ListingDetails({ listing, onClose, onDeleteSuccess }) {
   const handleBookingRequest = async () => {
     try {
       const response = await axios.post(
-        `${serverUrl}/api/booking/request`,
+        `${serverUrl}/api/bookings/request`,
         {
           listingId: listing._id
         },
@@ -84,7 +84,7 @@ function ListingDetails({ listing, onClose, onDeleteSuccess }) {
 
   const handleCancelRequest = async () => {
     try {
-      await axios.delete(`${serverUrl}/api/booking/cancel/${requestId}`, {
+      await axios.delete(`${serverUrl}/api/bookings/cancel/${requestId}`, {
         withCredentials: true
       });
       alert("Booking request cancelled!");

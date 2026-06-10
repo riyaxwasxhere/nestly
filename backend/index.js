@@ -74,7 +74,7 @@ app.use("/api/conversations", convoRouter);
 app.use("/api/saved", savedRouter);
 app.use("/api/visits", visitRouter);
 app.use("/api/profile", profileRouter);
-app.use("/api/booking", bookingRouter);
+app.use("/api/bookings", bookingRouter);
 
 app.use((err, req, res, next) => {
   console.log("GLOBAL ERROR:", err.message);

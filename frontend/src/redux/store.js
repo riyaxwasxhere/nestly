@@ -4,6 +4,8 @@ import authReducer from './authSlice'
 import studentReducer from './studentSlice'
 import ownerReducer from './ownerSlice'
 import savedReducer from './savedSlice'
+import visitReducer from './visitSlice'
+import bookingReducer from './bookingSlice'
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +13,8 @@ export const store = configureStore({
         auth: authReducer,
         student: studentReducer,
         owner: ownerReducer,
-        saved: savedReducer
+        saved: savedReducer,
+        visits: visitReducer,
+        booking: bookingReducer
     }
 })

@@ -1,4 +1,4 @@
-import BookingRequest from "../models/BookinRequest.js";
+import BookingRequest from "../models/BookingRequest.js";
 import Listing from "../models/Listing.js";
 
 export const requestBooking = async (req, res) => {
@@ -11,6 +11,12 @@ export const requestBooking = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Listing not found"
+      });
+    }
+    if (listing.owner.toString() === studentId.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot request a booking for your own listing"
       });
     }
 
@@ -121,6 +127,42 @@ export const cancelBookingRequest = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Request cancelled"
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+export const updateBookingStatus = async (req, res) => {
+  try {
+    const ownerId = req.user._id;
+    const { bookingId } = req.params;
+    const { status } = req.body;
+
+    const booking = await BookingRequest.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking request not found"
+      });
+    }
+    if (booking.owner.toString() !== ownerId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    booking.status = status;
+    await booking.save();
+
+    return res.status(200).json({
+      success: true,
+      booking
     });
   } catch (error) {
     return res.status(500).json({

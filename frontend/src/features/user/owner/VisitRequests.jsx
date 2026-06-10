@@ -3,19 +3,14 @@ import VisitCard from "./VisitCard";
 import { useEffect } from "react";
 import axios from "axios";
 import { serverUrl } from "../../../App";
-
-const tabs = [
-  { title: "All Requests", count: 12 },
-  { title: "Pending", count: 12 },
-  { title: "Accepted", count: 12 },
-  { title: "Rejected", count: 12 },
-  { title: "Cancelled", count: 12 },
-  { title: "Completed", count: 12 }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { setVisits } from "../../../redux/visitSlice";
 
 function VisitRequests() {
   const [tab, setTab] = useState("All Requests");
-  const [requests, setRequests] = useState([]);
+  const dispatch = useDispatch();
+  const requests = useSelector((state) => state.visits.visits);
+
   useEffect(() => {
     const fetchAllRequests = async () => {
       try {
@@ -23,13 +18,45 @@ function VisitRequests() {
           `${serverUrl}/api/visits/ownerVisitRequests`,
           { withCredentials: true }
         );
-        setRequests(response.data.visitRequests);
+        console.log(response.data);
+        dispatch(setVisits(response.data.visitRequests));
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchAllRequests();
-  }, [requests]);
+  }, [dispatch]);
+
+  const pendingCount = requests.filter(
+    (req) => req.status === "Pending"
+  ).length;
+  const acceptedCount = requests.filter(
+    (req) => req.status === "Accepted"
+  ).length;
+  const rejectedCount = requests.filter(
+    (req) => req.status === "Rejected"
+  ).length;
+  const cancelledCount = requests.filter(
+    (req) => req.status === "Cancelled"
+  ).length;
+  const completedCount = requests.filter(
+    (req) => req.status === "Completed"
+  ).length;
+
+  const tabs = [
+    { title: "All Requests", count: requests.length },
+    { title: "Pending", count: pendingCount },
+    { title: "Accepted", count: acceptedCount },
+    { title: "Rejected", count: rejectedCount },
+    { title: "Cancelled", count: cancelledCount },
+    { title: "Completed", count: completedCount }
+  ];
+
+  const filteredRequests =
+    tab === "All Requests"
+      ? requests
+      : requests.filter((req) => req.status === tab);
 
   return (
     <div className="h-full px-10 py-4 overflow-y-auto pb-30 no-scrollbar ">
@@ -40,7 +67,9 @@ function VisitRequests() {
         >
           📅 Visit Requests
         </h2>
-        <span className="text-xs text-[#867a5f]">0 visit requests</span>
+        <span className="text-xs text-[#867a5f]">
+          {pendingCount} pending visit requests
+        </span>
       </div>
       <ul className="flex gap-10">
         {tabs.map((t) => (
@@ -55,9 +84,13 @@ function VisitRequests() {
         ))}
       </ul>
       <div className="flex flex-col gap-4 my-6">
-        {requests.map((visit) => (
-          <VisitCard key={visit._id} visit={visit}/>
-        ))}
+        {filteredRequests.length > 0 ? (
+          filteredRequests.map((visit) => (
+            <VisitCard key={visit._id} visit={visit} />
+          ))
+        ) : (
+          <p className="py-10 text-center text-gray-400">No requests found</p>
+        )}
       </div>
     </div>
   );
