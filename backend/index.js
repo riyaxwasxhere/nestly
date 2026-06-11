@@ -13,6 +13,7 @@ import savedRouter from "./routes/savedRouter.js";
 import visitRouter from "./routes/visitRoutes.js";
 import profileRouter from "./routes/profileRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
+import reviewRouter from "./routes/reviewRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -75,6 +76,7 @@ app.use("/api/saved", savedRouter);
 app.use("/api/visits", visitRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/reviews", reviewRouter);
 
 app.use((err, req, res, next) => {
   console.log("GLOBAL ERROR:", err.message);

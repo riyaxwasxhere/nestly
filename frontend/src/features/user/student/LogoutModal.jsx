@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 
 function LogoutModal({ onClose }) {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogOut = async () => {
     try {
       await axios.post(
@@ -16,8 +16,8 @@ function LogoutModal({ onClose }) {
         {},
         { withCredentials: true }
       );
-      dispatch(setUserData(null))
-      navigate("/auth")
+      dispatch(setUserData(null));
+      navigate("/auth");
     } catch (error) {
       console.log("Error logging out: ", error);
     }

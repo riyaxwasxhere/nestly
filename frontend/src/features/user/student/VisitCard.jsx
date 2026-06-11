@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Calendar,
   MapPin,
@@ -9,8 +9,22 @@ import {
   View,
   X
 } from "lucide-react";
+import RateModal from "./RateModal";
 
 function VisitCard({ visitRequest, onCancel }) {
+  const [open, setOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+
+  const handleOpenModal = (listing) => {
+    setSelectedListing(listing);
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    setSelectedListing(null);
+  };
+
   const post = visitRequest.listing;
   if (!visitRequest) return null;
 
@@ -58,12 +72,12 @@ function VisitCard({ visitRequest, onCancel }) {
           </p>
           <p className="flex items-center gap-1 text-sm">
             <Calendar size={15} />
-             Visit Date: {visitRequest.visitDate?.split("T")[0]}
+            Visit Date: {visitRequest.visitDate?.split("T")[0]}
           </p>
         </div>
 
         <p className="mb-2 text-sm italic">
-          {visitRequest.message ? `"${visitRequest.message}"`: ""}
+          {visitRequest.message ? `"${visitRequest.message}"` : ""}
         </p>
 
         <div className="grid grid-cols-4 gap-4 mt-auto">
@@ -94,12 +108,18 @@ function VisitCard({ visitRequest, onCancel }) {
             </button>
           )}
           {visitRequest.status === "Completed" && (
-            <button className="flex items-center justify-center gap-4 py-2 border cursor-pointer rounded-2xl">
+            <button
+              onClick={() => handleOpenModal(post)}
+              className="flex items-center justify-center gap-4 py-2 border cursor-pointer rounded-2xl"
+            >
               <Star />
-              <span>Leave a Review</span>
+              Leave a Review
             </button>
           )}
         </div>
+        {open && (
+          <RateModal listing={selectedListing} onClose={handleCloseModal} />
+        )}
       </div>
     </div>
   );

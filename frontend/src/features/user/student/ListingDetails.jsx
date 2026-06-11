@@ -16,15 +16,17 @@ import { setStudentView } from "../../../redux/studentSlice";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import { useEffect } from "react";
+import ViewReviewsModal from "./ViewReviewsModal";
 
 function ListingDetails({ listing, onClose, onDeleteSuccess }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [requestId, setRequestId] = useState(null);
   const [hasRequested, setHasRequested] = useState(false);
+  const [reviewModal, setReviewModal] = useState(false);
   const listingId = listing._id;
   const user = useSelector((state) => state.user?.userData);
-  
+
   const handleDeleteListing = async () => {
     try {
       await axios.delete(`${serverUrl}/api/listings/delete/${listingId}`, {
@@ -199,12 +201,24 @@ function ListingDetails({ listing, onClose, onDeleteSuccess }) {
                   </p>
                 </div>
               </div>
-              <span className="px-4 py-1 text-sm bg-green-900 rounded-full">
-                {listing.averageRating > 0
-                  ? `⭐ ${listing.averageRating} · `
-                  : ``}{" "}
-                {listing.totalReviews} reviews{" "}
-              </span>
+              <div className="flex gap-2">
+                <span className="px-4 py-1 text-sm bg-green-900 rounded-full">
+                  {listing.averageRating > 0
+                    ? `⭐ ${listing.averageRating} · `
+                    : ``}{" "}
+                  {listing.totalReviews} reviews{" "}
+                </span>
+                {listing.totalReviews > 0 && (
+                  <button
+                    onClick={() => {
+                      setReviewModal(true);
+                    }}
+                    className="px-4 py-1 text-sm rounded-full cursor-pointer bg-amber-900/70"
+                  >
+                    View Reviews
+                  </button>
+                )}
+              </div>
             </div>
 
             {user?.role === "student" ? (
@@ -252,6 +266,15 @@ function ListingDetails({ listing, onClose, onDeleteSuccess }) {
 
           {open && (
             <BookVisitModal listing={listing} onClose={handleCloseModal} />
+          )}
+          
+          {reviewModal && (
+            <ViewReviewsModal
+              listing={listing}
+              onClose={() => {
+                setReviewModal(false);
+              }}
+            />
           )}
         </div>
       </div>

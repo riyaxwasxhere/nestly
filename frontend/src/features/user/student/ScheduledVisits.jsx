@@ -5,7 +5,7 @@ import { serverUrl } from "../../../App";
 
 function ScheduledVisits() {
   const [visits, setVisits] = useState([]);
-
+  
   useEffect(() => {
     const fetchVisitRequests = async () => {
       try {
@@ -24,6 +24,7 @@ function ScheduledVisits() {
 
     fetchVisitRequests();
   }, []);
+
 
   const handleCancel = async (visitRequestId) => {
     try {
@@ -64,7 +65,11 @@ function ScheduledVisits() {
           </div>
         ) : (
           visits.map((visit) => (
-            <VisitCard key={visit._id} visitRequest={visit} onCancel={handleCancel} />
+            <VisitCard
+              key={visit._id}
+              visitRequest={visit}
+              onCancel={handleCancel}
+            />
           ))
         )}
       </div>
