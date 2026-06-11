@@ -18,7 +18,6 @@ function BookingRequests() {
           `${serverUrl}/api/bookings/getAllRequests`,
           { withCredentials: true }
         );
-        console.log(response.data);
         dispatch(setBookings(response.data.requests));
       } catch (error) {
         console.log(error);

@@ -30,7 +30,7 @@ function ViewReviewsModal({ listing, onClose }) {
     if (listing?._id) {
       fetchReviews();
     }
-  }, [listing]);
+  }, [listing, reviews]);
 
   const averageRating =
     reviews.length > 0

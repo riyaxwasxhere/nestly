@@ -35,7 +35,7 @@ function useCurrentCity() {
         console.log("LOCATION ERROR:", error.message);
       }
     );
-  }, []);
+  }, [dispatch]);
 }
 
 export default useCurrentCity;
