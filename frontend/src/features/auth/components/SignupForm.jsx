@@ -74,25 +74,19 @@ function SignupForm() {
     try {
       const response = await axios.post(
         `${serverUrl}/api/auth/signup`,
-        {
-          fullname: fullName,
-          email,
-          mobile,
-          password,
-          role
-        },
+        { fullname: fullName, email, mobile, password, role },
         { withCredentials: true }
       );
       dispatch(setUserData(response.data.user));
-      if(response.data.user.role === "owner"){
-        navigate("/owner/dashboard")
-      }else{
-        navigate("/student/dashboard")
+      if (response.data.user.role === "owner") {
+        navigate("/owner/dashboard");
+      } else {
+        navigate("/student/dashboard");
       }
       setError("");
       setLoading(false);
     } catch (error) {
-      console.log("ERROR: ",error)
+      console.log("ERROR: ", error);
       setError(
         error.response?.data?.message || "An error occurred during sign up"
       );
@@ -114,7 +108,6 @@ function SignupForm() {
     try {
       const response = await signInWithPopup(auth, provider);
       console.log("Firebase success: ", response.user);
-
       const result = await axios.post(
         `${serverUrl}/api/auth/signup/google-auth`,
         {
@@ -170,9 +163,7 @@ function SignupForm() {
           <div
             key={i}
             className="flex-1 h-1 transition-all duration-300 rounded-full"
-            style={{
-              backgroundColor: i <= filledSegments ? color : "#5a4626"
-            }}
+            style={{ backgroundColor: i <= filledSegments ? color : "#5a4626" }}
           />
         ))}
       </div>
@@ -180,33 +171,34 @@ function SignupForm() {
   };
 
   return (
-    <div className="flex flex-col items-center flex-1 h-screen py-16 overflow-y-auto no-scrollbar">
-      <div className="w-[50%]">
+    <div className="flex flex-col items-center flex-1 h-screen px-4 py-10 overflow-y-auto sm:py-16 no-scrollbar">
+      <div className="w-full max-w-sm sm:w-[80%] md:w-[60%] lg:w-[50%]">
         <div>
           <h1
             style={{ fontFamily: "Playfair Display, serif" }}
-            className="mb-3 text-4xl font-extrabold"
+            className="mb-3 text-3xl font-extrabold sm:text-4xl"
           >
             Join <span className="text-[#F5A623]">Nestly</span>
           </h1>
-          <p className="text-[#f0e3c77c] text-sm  font-normal mb-10">
+          <p className="text-[#f0e3c77c] text-sm font-normal mb-8 sm:mb-10">
             Create your free account and find your perfect room
           </p>
         </div>
 
         <button
           onClick={() => handleGoogleAuth()}
-          className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center cursor-pointer "
+          className="flex hover:bg-[#f5a52320] relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:border-[#F5A623] transition-all duration-200 w-full justify-center cursor-pointer"
         >
-          <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm inset-0 rounded-xl "></div>
+          <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm inset-0 rounded-xl"></div>
           <span className="z-9">
             <FaGoogle />
           </span>
           <span className="text-sm font-semibold z-9">Google</span>
         </button>
-        <div className="flex items-center text-xs text-gray-400 my-7">
+
+        <div className="flex items-center my-6 text-xs text-gray-400 sm:my-7">
           <div className="flex-1 h-[0.1px] bg-[#5a4626]"></div>
-          <span className="px-3 whitespace-nowrap uppercase  tracking-wider font-medium text-[#f0e3c77c]">
+          <span className="px-3 whitespace-nowrap uppercase tracking-wider font-medium text-[#f0e3c77c]">
             or sign up with email
           </span>
           <div className="flex-1 h-[0.1px] bg-[#5a4626]"></div>
@@ -220,14 +212,14 @@ function SignupForm() {
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setRole("student")}
-                className={`flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full  cursor-pointer justify-center mb-5 ${role === "student" ? "border-[#F5A623]" : ""}`}
+                className={`flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full cursor-pointer justify-center mb-5 ${role === "student" ? "border-[#F5A623]" : ""}`}
               >
                 <div
-                  className={`absolute backdrop-blur-sm z-2 inset-0 rounded-xl ${role === "student" ? "bg-[#e2b0313a]" : "bg-[#7c745f1a]"} `}
+                  className={`absolute backdrop-blur-sm z-2 inset-0 rounded-xl ${role === "student" ? "bg-[#e2b0313a]" : "bg-[#7c745f1a]"}`}
                 ></div>
                 <span className="z-9">🎓</span>
                 <span
-                  className={` text-sm z-9 ${role === "student" ? "text-[#F5A623]" : "text-[#f0e3c77c]"}`}
+                  className={`text-sm z-9 ${role === "student" ? "text-[#F5A623]" : "text-[#f0e3c77c]"}`}
                 >
                   Student
                 </span>
@@ -237,11 +229,11 @@ function SignupForm() {
                 className={`flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full cursor-pointer justify-center mb-5 ${role === "owner" ? "border-[#F5A623]" : ""}`}
               >
                 <div
-                  className={`absolute  backdrop-blur-sm z-2 inset-0 rounded-xl  ${role === "owner" ? "bg-[#e2b0313a]" : "bg-[#7c745f1a]"} `}
+                  className={`absolute backdrop-blur-sm z-2 inset-0 rounded-xl ${role === "owner" ? "bg-[#e2b0313a]" : "bg-[#7c745f1a]"}`}
                 ></div>
                 <span className="z-9">🏠</span>
                 <span
-                  className={` text-sm z-9  ${role === "owner" ? "text-[#F5A623]" : "text-[#f0e3c77c]"}`}
+                  className={`text-sm z-9 ${role === "owner" ? "text-[#F5A623]" : "text-[#f0e3c77c]"}`}
                 >
                   Property Owner
                 </span>
@@ -258,7 +250,7 @@ function SignupForm() {
             <label className="mb-3 text-xs font-semibold uppercase">
               full name
             </label>
-            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
+            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
                 value={fullName}
@@ -267,7 +259,7 @@ function SignupForm() {
                   if (e.target.value.trim())
                     setFieldErrors((p) => ({ ...p, fullName: "" }));
                 }}
-                className="flex justify-between flex-1 text-sm outline-0 z-9"
+                className="flex justify-between flex-1 min-w-0 text-sm bg-transparent outline-0 z-9"
                 type="text"
                 placeholder="Aarav Sharma"
               />
@@ -279,7 +271,7 @@ function SignupForm() {
             <label className="mb-3 text-xs font-semibold uppercase">
               Email address
             </label>
-            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
+            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
                 value={email}
@@ -288,11 +280,11 @@ function SignupForm() {
                   if (e.target.value.trim())
                     setFieldErrors((p) => ({ ...p, email: "" }));
                 }}
-                className="flex justify-between flex-1 text-sm outline-0 z-9"
+                className="flex justify-between flex-1 min-w-0 text-sm bg-transparent outline-0 z-9"
                 type="email"
                 placeholder="you@college.edu"
               />
-              <span className="text-sm z-9">
+              <span className="text-sm z-9 shrink-0">
                 <FaEnvelope />
               </span>
             </div>
@@ -303,7 +295,7 @@ function SignupForm() {
             <label className="mb-3 text-xs font-semibold uppercase">
               mobile number
             </label>
-            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5 ">
+            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
                 value={mobile}
@@ -312,11 +304,11 @@ function SignupForm() {
                   if (e.target.value.trim())
                     setFieldErrors((p) => ({ ...p, mobile: "" }));
                 }}
-                className="flex justify-between flex-1 text-sm z-9 outline-0"
+                className="flex justify-between flex-1 min-w-0 text-sm bg-transparent z-9 outline-0"
                 type="text"
                 placeholder="+91 98323 43733"
               />
-              <span className="text-sm z-9">
+              <span className="text-sm z-9 shrink-0">
                 <FaMobile />
               </span>
             </div>
@@ -327,7 +319,7 @@ function SignupForm() {
             <label className="mb-3 text-xs font-semibold uppercase">
               Password
             </label>
-            <div className="flex  relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5">
+            <div className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center w-full justify-center mb-5">
               <div className="absolute bg-[#6e6b6b1a] backdrop-blur-sm z-2 inset-0 rounded-xl"></div>
               <input
                 value={password}
@@ -336,13 +328,13 @@ function SignupForm() {
                   if (e.target.value)
                     setFieldErrors((p) => ({ ...p, password: "" }));
                 }}
-                className="flex justify-between flex-1 text-sm outline-0 z-9"
+                className="flex justify-between flex-1 min-w-0 text-sm bg-transparent outline-0 z-9"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-sm cursor-pointer z-9"
+                className="text-sm cursor-pointer z-9 shrink-0"
               >
                 {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
               </span>
@@ -374,20 +366,22 @@ function SignupForm() {
             <FieldError name="password" />
           </div>
 
-          <label className="flex gap-2 my-5 cursor-pointer">
-            <input type="checkbox" className="w-4 h-4 accent-amber-500" />
+\          <label className="flex items-start gap-2 my-5 cursor-pointer">
+            <input
+              type="checkbox"
+              className="w-4 h-4 mt-0.5 accent-amber-500 shrink-0"
+            />
             <p className="text-xs text-[#f0e3c77c]">
-              I agree to the
-              <span className="text-[#F5A623]">
-                Terms & Conditions
-              </span> and <span className="text-[#F5A623]">Privacy Policy</span>{" "}
-              of Nestly
+              I agree to the{" "}
+              <span className="text-[#F5A623]">Terms & Conditions</span> and{" "}
+              <span className="text-[#F5A623]">Privacy Policy</span> of Nestly
             </p>
           </label>
+
           <button
             disabled={loading}
             onClick={() => handleSignUp()}
-            className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:-translate-y-1 my-5 transition-all duration-400 w-full justify-center bg-[#F5A623] shadow-[0_0_25px_rgba(255,255,255,0.25)] font-semibold text-black cursor-pointer "
+            className="flex relative rounded-xl py-3 px-4 border border-[#5a4626] gap-3 items-center hover:-translate-y-1 my-5 transition-all duration-400 w-full justify-center bg-[#F5A623] shadow-[0_0_25px_rgba(255,255,255,0.25)] font-semibold text-black cursor-pointer"
           >
             {loading ? (
               <ClipLoader size={20} color="#000" />
@@ -397,13 +391,15 @@ function SignupForm() {
               </>
             )}
           </button>
+
           {error && (
             <p className="mb-2 -mt-4 text-sm text-center text-red-500">
               {error}
             </p>
           )}
-          <pre className="flex justify-center text-xs font-sans text-[#f0e3c77c]">
-            Already have an account?
+
+          <pre className="flex justify-center text-xs font-sans text-[#f0e3c77c] flex-wrap gap-1">
+            Already have an account?{" "}
             <span
               onClick={() => dispatch(setView("signin"))}
               className="text-[#F5A623] font-bold cursor-pointer"

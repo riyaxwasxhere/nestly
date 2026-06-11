@@ -14,6 +14,7 @@ function Messages() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [showList, setShowList] = useState(true); 
   const scrollRef = useRef();
 
   const currentUser = useSelector((state) => state.user?.userData);
@@ -29,10 +30,7 @@ function Messages() {
       try {
         const response = await axios.post(
           `${serverUrl}/api/conversations/create`,
-          {
-            senderId: currentUserId,
-            receiverId: selectedChat._id
-          },
+          { senderId: currentUserId, receiverId: selectedChat._id },
           { withCredentials: true }
         );
         setActiveConversation({
@@ -41,6 +39,7 @@ function Messages() {
           receiverName: selectedChat.fullname,
           receiverProfilePic: selectedChat.profilePic
         });
+        setShowList(false); 
       } catch (error) {
         console.log(error);
       }
@@ -52,9 +51,7 @@ function Messages() {
     if (!currentUserId) return;
     socket.connect();
     socket.emit("addUser", currentUserId);
-    socket.on("getUsers", (users) => {
-      setOnlineUsers(users);
-    });
+    socket.on("getUsers", (users) => setOnlineUsers(users));
     return () => {
       socket.off("getUsers");
       socket.disconnect();
@@ -71,11 +68,7 @@ function Messages() {
       if (activeConversationRef.current?.receiverId === senderId) {
         setMessages((prev) => [
           ...prev,
-          {
-            senderId,
-            text,
-            createdAt: new Date()
-          }
+          { senderId, text, createdAt: new Date() }
         ]);
       }
     });
@@ -99,8 +92,6 @@ function Messages() {
   }, [currentUserId]);
 
   useEffect(() => {
-    console.log(activeConversation);
-
     if (!activeConversation?.conversationId) return;
     const fetchMessages = async () => {
       try {
@@ -155,13 +146,23 @@ function Messages() {
     }
   };
 
+  const handleSelectConversation = (convo) => {
+    setActiveConversation(convo);
+    setShowList(false); 
+  };
+
   const isOnline = (userId) =>
     onlineUsers.some((user) => user.userId === userId);
 
   return (
     <div className="flex flex-1 h-full overflow-hidden">
-      {/* Conversation List */}
-      <div className="p-4 border-r w-72 border-[#5a4626] h-full overflow-y-auto no-scrollbar">
+      <div
+        className={`
+          ${showList ? "flex" : "hidden"} sm:flex
+          flex-col p-4 border-r border-[#5a4626] h-full overflow-y-auto no-scrollbar
+          w-full sm:w-64 md:w-72 shrink-0
+        `}
+      >
         <input
           className="w-full px-4 py-3 mb-4 border border-[#4a3720] rounded-2xl text-xs focus:outline-none bg-[#2a1d0d]/80 text-[#F0E8D8]"
           type="text"
@@ -173,27 +174,32 @@ function Messages() {
         {filteredConversations.map((convo) => (
           <div
             key={convo.conversationId}
-            onClick={() => setActiveConversation(convo)}
-            className={`flex items-center p-3 mb-2 rounded-2xl cursor-pointer transition-colors ${activeConversation?.conversationId === convo.conversationId ? "bg-[#413117]/60" : "hover:bg-[#413117]/20"}`}
+            onClick={() => handleSelectConversation(convo)}
+            className={`flex items-center p-3 mb-2 rounded-2xl cursor-pointer transition-colors ${
+              activeConversation?.conversationId === convo.conversationId
+                ? "bg-[#413117]/60"
+                : "hover:bg-[#413117]/20"
+            }`}
           >
-            <div className="relative w-10 h-10 bg-white rounded-full">
+            <div className="relative w-10 h-10 bg-white rounded-full shrink-0">
               <img
                 src={
                   convo.receiverProfilePic ||
                   "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=1024x1024&w=is&k=20&c=-mUWsTSENkugJ3qs5covpaj-bhYpxXY-v9RDpzsw504="
                 }
-                alt={convo.receiverName[0][0]}
+                alt={convo.receiverName?.[0]}
                 className="object-cover w-full h-full scale-110 rounded-full"
               />
               {isOnline(convo.receiverId) && (
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#413117] rounded-full"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#413117] rounded-full" />
               )}
             </div>
-            <div className="flex-1 ml-3">
-              <div className="flex justify-between">
-                <p className="text-sm font-medium">{convo.receiverName}</p>
-
-                <p className="text-[10px] text-gray-400">
+            <div className="flex-1 min-w-0 ml-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium truncate">
+                  {convo.receiverName}
+                </p>
+                <p className="text-[10px] text-gray-400 shrink-0 ml-1">
                   {convo.lastMessageAt
                     ? new Date(convo.lastMessageAt).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -202,8 +208,7 @@ function Messages() {
                     : ""}
                 </p>
               </div>
-
-              <p className="w-40 text-xs text-gray-500 truncate">
+              <p className="text-xs text-gray-500 truncate">
                 {convo.lastMessage || "No messages yet"}
               </p>
             </div>
@@ -211,15 +216,23 @@ function Messages() {
         ))}
       </div>
 
-      {/* Message Area */}
-
-      <div className="flex flex-col flex-1 h-full min-h-0 overflow-hidden">
-        {" "}
+      <div
+        className={`
+          ${!showList ? "flex" : "hidden"} sm:flex
+          flex-col flex-1 h-full min-h-0 overflow-hidden
+        `}
+      >
         {activeConversation ? (
           <div className="flex flex-col flex-1 h-full min-h-0">
-            {" "}
-            {/* Header */}
-            <div className="flex items-center gap-3 px-6 py-3 border-b border-[#4a3720] bg-[#1a0f05]/60">
+            <div className="flex items-center gap-3 px-4 sm:px-6 py-3 border-b border-[#4a3720] bg-[#1a0f05]/60">
+              <button
+                onClick={() => setShowList(true)}
+                className="sm:hidden p-1 rounded-lg text-[#F5A623] mr-1"
+                aria-label="Back to conversations"
+              >
+                ‹
+              </button>
+
               <div className="relative bg-white rounded-full w-9 h-9 shrink-0">
                 <img
                   className="object-cover w-full h-full scale-110 rounded-full"
@@ -227,37 +240,44 @@ function Messages() {
                     activeConversation?.receiverProfilePic ||
                     "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=1024x1024&w=is&k=20&c=-mUWsTSENkugJ3qs5covpaj-bhYpxXY-v9RDpzsw504="
                   }
+                  alt="avatar"
                 />
                 {isOnline(activeConversation?.receiverId) && (
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#1a0f05] rounded-full"></span>
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#1a0f05] rounded-full" />
                 )}
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-[#F0E8D8]">
+
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-[#F0E8D8] truncate">
                   {activeConversation?.receiverName}
                 </p>
                 <p
-                  className={`text-xs ${isOnline(activeConversation?.receiverId) ? "text-green-400" : "text-gray-500"}`}
+                  className={`text-xs ${
+                    isOnline(activeConversation?.receiverId)
+                      ? "text-green-400"
+                      : "text-gray-500"
+                  }`}
                 >
                   {isOnline(activeConversation?.receiverId)
                     ? "Online"
                     : "Offline"}
                 </p>
               </div>
+
               <PhoneOutgoingIcon
                 height={18}
-                className="cursor-pointer text-[#F5A623]"
+                className="cursor-pointer text-[#F5A623] shrink-0"
               />
             </div>
-            {/* Messages */}
-            <div className="flex flex-col flex-1 min-h-0 gap-2 px-6 py-4 overflow-y-auto no-scrollbar">
+
+            <div className="flex flex-col flex-1 min-h-0 gap-2 px-3 py-4 overflow-y-auto sm:px-6 no-scrollbar">
               {messages.map((msg, i) => {
                 const isSender = msg.senderId === currentUserId;
                 return (
                   <div
                     key={msg._id || i}
                     ref={i === messages.length - 1 ? scrollRef : null}
-                    className={`px-4 py-2 rounded-2xl max-w-sm text-sm wrap-break-word leading-relaxed shadow-sm
+                    className={`px-4 py-2 rounded-2xl max-w-[75%] sm:max-w-sm text-sm wrap-break-word leading-relaxed shadow-sm
                       ${
                         isSender
                           ? "bg-[#F5A623] text-black self-end rounded-br-sm"
@@ -269,8 +289,8 @@ function Messages() {
                 );
               })}
             </div>
-            {/* Input */}
-            <div className="flex items-center gap-2 px-6 py-3 border-t border-[#4a3720] bg-[#1a0f05]/60">
+
+            <div className="flex items-center gap-2 px-3 sm:px-6 py-3 border-t border-[#4a3720] bg-[#1a0f05]/60">
               <input
                 type="text"
                 placeholder="Type a message ..."
@@ -284,7 +304,7 @@ function Messages() {
               <button
                 onClick={handleSendMessage}
                 disabled={!newMessage.trim()}
-                className="p-2.5 rounded-xl bg-[#F5A623] text-black disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#e09510] transition-colors"
+                className="p-2.5 rounded-xl bg-[#F5A623] text-black disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#e09510] transition-colors shrink-0"
               >
                 <SendHorizonal size={18} />
               </button>

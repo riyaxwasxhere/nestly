@@ -7,6 +7,7 @@ import { setFpStep, setView } from "../../../redux/authSlice";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import { useRef } from "react";
+
 function ForgotPassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ function ForgotPassword() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -58,14 +58,11 @@ function ForgotPassword() {
   const handleVerifyOtp = async () => {
     setLoading(true);
     try {
-      console.log("EMAIL:", email);
-      console.log("OTP:", otp.join(""));
       const response = await axios.post(
         `${serverUrl}/api/auth/verify-otp`,
         { email, otp: otp.join("") },
         { withCredentials: true }
       );
-
       dispatch(setFpStep(3));
       console.log("OTP verified successfully: ", response.data);
       setError("");
@@ -102,21 +99,24 @@ function ForgotPassword() {
 
   return (
     <div>
-      <nav className=" h-20 flex shrink-0 justify-between items-center px-11 border-b  border-[#352101] backdrop-blur-xl sticky top-0 z-50 bg-[#0E0A07]">
+      <nav className="h-16 sm:h-20 flex shrink-0 justify-between items-center px-4 sm:px-11 border-b border-[#352101] backdrop-blur-xl sticky top-0 z-50 bg-[#0E0A07]">
         <Logo />
         <button
           onClick={() => {
             navigate("/auth");
             dispatch(setView("signin"));
           }}
-          className="text-[#8c7c66] cursor-pointer border border-[#6a5c4858] py-2 rounded-full bg-[#211608] px-4 font-semibold items-center text-xs flex gap-2 hover:border-[#DC901C] hover:text-[#DC901C] transition-all duration-200"
+          className="text-[#8c7c66] cursor-pointer border border-[#6a5c4858] py-2 rounded-full bg-[#211608] px-3 sm:px-4 font-semibold items-center text-xs flex gap-2 hover:border-[#DC901C] hover:text-[#DC901C] transition-all duration-200"
         >
-          <ArrowLeft size={16} /> <span>Back to Sign In</span>
+          <ArrowLeft size={16} />
+          <span className="hidden sm:inline">Back to Sign In</span>
+          <span className="sm:hidden">Back</span>
         </button>
       </nav>
-      <main className="relative z-10 flex items-center justify-center flex-1 min-h-screen px-24 pt-7 pb-12 bg-[#0E0A07]">
-        <div className="bg-[#211608] md:w-[45%] max-w-[90%] border rounded-3xl border-[#563501] py-10 flex flex-col items-center px-10">
-          <div className="flex items-baseline justify-between mb-8 text-[#8c7c66] text-xs font-semibold uppercase w-[60%]">
+
+      <main className="relative z-10 flex items-center justify-center flex-1 min-h-screen px-4 sm:px-10 md:px-24 pt-7 pb-12 bg-[#0E0A07]">
+        <div className="bg-[#211608] w-full sm:w-[80%] md:w-[55%] lg:w-[45%] max-w-lg border rounded-3xl border-[#563501] py-8 sm:py-10 flex flex-col items-center px-5 sm:px-10">
+          <div className="flex items-baseline justify-between mb-8 text-[#8c7c66] text-xs font-semibold uppercase w-full sm:w-[70%]">
             <div className="flex flex-col items-center gap-1">
               <div className="border border-[#8c7c66] rounded-full w-8 h-8 flex items-center justify-center">
                 1
@@ -140,8 +140,8 @@ function ForgotPassword() {
           </div>
 
           {step === 1 && (
-            <div>
-              <div className="flex justify-center m">
+            <div className="w-full">
+              <div className="flex justify-center">
                 <div className="text-4xl bg-[#302009] flex items-center justify-center w-18 h-18 rounded-3xl border border-[#573605]">
                   🔐
                 </div>
@@ -149,10 +149,9 @@ function ForgotPassword() {
               <div className="flex flex-col items-center text-center my-7">
                 <h2
                   style={{ fontFamily: "Playfair Display, serif" }}
-                  className="text-[#F0E8D8] text-3xl font-black mb-2"
+                  className="text-[#F0E8D8] text-2xl sm:text-3xl font-black mb-2"
                 >
-                  Forgot your{" "}
-                  <span className="text-[#DC901C]">Password?</span>{" "}
+                  Forgot your <span className="text-[#DC901C]">Password?</span>
                 </h2>
                 <p className="text-sm text-[#8c7c66]">
                   No worries! Enter the email address linked to your Nestly
@@ -171,16 +170,16 @@ function ForgotPassword() {
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="text-[#8c7c66] text-sm outline-0 flex-1"
+                    className="text-[#8c7c66] text-sm outline-0 flex-1 bg-transparent min-w-0"
                     id="email"
                     type="text"
                     placeholder="you@college.edu"
                   />
                 </div>
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                   <button
                     onClick={() => handleSendOtp()}
-                    className=" bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-[16px] font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl"
+                    className="bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-base font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl"
                   >
                     Send Verification Code →
                   </button>
@@ -194,7 +193,7 @@ function ForgotPassword() {
                       navigate("/auth");
                       dispatch(setView("signin"));
                     }}
-                    className="mb-2 rounded-xl py-3 text-[16px] cursor-pointer font-semibold border border-[#563501] text-[#8c7c66] hover:text-[#DC901C] hover:border-[#DC901C] transition-all duration-200"
+                    className="mb-2 rounded-xl py-3 text-base cursor-pointer font-semibold border border-[#563501] text-[#8c7c66] hover:text-[#DC901C] hover:border-[#DC901C] transition-all duration-200"
                   >
                     ← Back to Sign In
                   </button>
@@ -216,17 +215,16 @@ function ForgotPassword() {
           )}
 
           {step === 2 && (
-            <div>
+            <div className="w-full">
               <div className="flex justify-center">
                 <div className="text-4xl bg-[#302009] flex items-center justify-center w-18 h-18 rounded-3xl border border-[#573605]">
                   📨
                 </div>
               </div>
-
               <div className="flex flex-col items-center text-center my-7">
                 <h2
                   style={{ fontFamily: "Playfair Display, serif" }}
-                  className="text-[#F0E8D8] text-3xl font-black mb-2"
+                  className="text-[#F0E8D8] text-2xl sm:text-3xl font-black mb-2"
                 >
                   Check your <span className="text-[#DC901C]">Email</span>
                 </h2>
@@ -238,7 +236,7 @@ function ForgotPassword() {
                   Enter it below to continue.
                 </p>
               </div>
-              <div className="flex justify-center gap-3 mb-6 ">
+              <div className="flex justify-center gap-2 mb-6 sm:gap-3">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -248,7 +246,7 @@ function ForgotPassword() {
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     maxLength={1}
                     type="text"
-                    className="h-16 text-xl bg-[#2A1F12] border-[#573605] font-bold text-center  border w-14 rounded-xl text-[#DC901C] outline-0  transition-all duration-150"
+                    className="h-12 sm:h-16 text-lg sm:text-xl bg-[#2A1F12] border-[#573605] font-bold text-center border w-10 sm:w-14 rounded-xl text-[#DC901C] outline-0 transition-all duration-150"
                   />
                 ))}
               </div>
@@ -261,11 +259,10 @@ function ForgotPassword() {
                   Resend Code
                 </span>
               </p>
-
               <div className="flex flex-col gap-3 my-3">
                 <button
                   onClick={() => handleVerifyOtp()}
-                  className=" bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-[16px] font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl"
+                  className="bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-base font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl"
                 >
                   Verify Code →
                 </button>
@@ -275,10 +272,8 @@ function ForgotPassword() {
                   </p>
                 )}
                 <button
-                  onClick={() => {
-                    dispatch(setFpStep(1));
-                  }}
-                  className="mb-2 rounded-xl py-3 text-[16px] cursor-pointer font-semibold border border-[#563501] text-[#8c7c66] hover:text-[#DC901C] hover:border-[#DC901C] transition-all duration-200"
+                  onClick={() => dispatch(setFpStep(1))}
+                  className="mb-2 rounded-xl py-3 text-base cursor-pointer font-semibold border border-[#563501] text-[#8c7c66] hover:text-[#DC901C] hover:border-[#DC901C] transition-all duration-200"
                 >
                   ← Change email address
                 </button>
@@ -287,7 +282,7 @@ function ForgotPassword() {
           )}
 
           {step === 3 && (
-            <div>
+            <div className="w-full">
               <div className="flex justify-center">
                 <div className="text-4xl bg-[#302009] flex items-center justify-center w-18 h-18 rounded-3xl border border-[#573605]">
                   🔑
@@ -296,16 +291,16 @@ function ForgotPassword() {
               <div className="flex flex-col items-center text-center my-7">
                 <h2
                   style={{ fontFamily: "Playfair Display, serif" }}
-                  className="text-[#F0E8D8] text-3xl font-black mb-2"
+                  className="text-[#F0E8D8] text-2xl sm:text-3xl font-black mb-2"
                 >
                   Set New <span className="text-[#DC901C]">Password</span>
                 </h2>
                 <p className="text-sm text-[#8c7c66]">
                   Almost there! Choose a strong password for your Nestly
-                  account. Make it unique and secure.
+                  account.
                 </p>
               </div>
-              <div>
+              <div className="mb-4">
                 <label
                   className="text-[#8c7c66] uppercase text-xs font-bold"
                   htmlFor="newPass"
@@ -317,14 +312,14 @@ function ForgotPassword() {
                   <input
                     value={newPass}
                     onChange={(e) => setNewPass(e.target.value)}
-                    className="text-[#8c7c66] text-sm outline-0 flex-1"
+                    className="text-[#8c7c66] text-sm outline-0 flex-1 bg-transparent min-w-0"
                     id="newPass"
                     type="text"
                     placeholder="Create a strong password"
                   />
                 </div>
               </div>
-              <div>
+              <div className="mb-4">
                 <label
                   className="text-[#8c7c66] uppercase text-xs font-bold"
                   htmlFor="confirmPass"
@@ -336,7 +331,7 @@ function ForgotPassword() {
                   <input
                     value={confirmPass}
                     onChange={(e) => setConfirm(e.target.value)}
-                    className="text-[#8c7c66] text-sm outline-0 flex-1"
+                    className="text-[#8c7c66] text-sm outline-0 flex-1 bg-transparent min-w-0"
                     id="confirmPass"
                     type="text"
                     placeholder="Repeat your password"
@@ -345,7 +340,7 @@ function ForgotPassword() {
               </div>
               <button
                 onClick={() => handleResetPassword()}
-                className=" bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-[16px] font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl flex w-full items-center justify-center"
+                className="bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-base font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl flex w-full items-center justify-center"
               >
                 Reset Password →
               </button>
@@ -356,16 +351,16 @@ function ForgotPassword() {
           )}
 
           {step === 4 && (
-            <div>
+            <div className="w-full">
               <div className="flex justify-center">
-                <div className="text-4xl bg-[#4caf7720] flex items-center justify-center w-25 h-25 rounded-full border border-[#4CAF77]">
+                <div className="text-4xl bg-[#4caf7720] flex items-center justify-center w-24 h-24 sm:w-25 sm:h-25 rounded-full border border-[#4CAF77]">
                   🎉
                 </div>
               </div>
               <div className="flex flex-col items-center text-center my-7">
                 <h2
                   style={{ fontFamily: "Playfair Display, serif" }}
-                  className="text-[#F0E8D8] text-3xl font-black mb-2"
+                  className="text-[#F0E8D8] text-2xl sm:text-3xl font-black mb-2"
                 >
                   Password <span className="text-[#DC901C]">Reset!</span>
                 </h2>
@@ -374,9 +369,8 @@ function ForgotPassword() {
                   in with your new credentials.
                 </p>
               </div>
-
-              <div className="bg-[#302009] p-5 mb-6 rounded-2xl border border-[#573605]">
-                <h3 className="text-[#8c7c66] uppercase text-xs font-semibold ">
+              <div className="bg-[#302009] p-4 sm:p-5 mb-6 rounded-2xl border border-[#573605]">
+                <h3 className="text-[#8c7c66] uppercase text-xs font-semibold">
                   security tip
                 </h3>
                 <p className="py-1 text-sm text-[#F0E8D8]">
@@ -390,9 +384,9 @@ function ForgotPassword() {
                   dispatch(setFpStep(1));
                   dispatch(setView("signin"));
                 }}
-                className=" bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-[16px] font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl flex w-full items-center justify-center"
+                className="bg-[#DC901C] mt-4 mb-3 rounded-xl py-3 text-base font-semibold cursor-pointer hover:shadow-[#dc8f1c3c] shadow-xl flex w-full items-center justify-center"
               >
-                Sign in to nestly →
+                Sign in to Nestly →
               </button>
             </div>
           )}

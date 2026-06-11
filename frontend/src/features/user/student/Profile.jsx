@@ -26,25 +26,15 @@ function Profile() {
   const currentUser = useSelector((state) => state.user?.userData);
   const studentInstitute = useSelector((state) => state.student?.institution);
 
-  const handleOpenModal = () => {
-    setEditProfileOpen(true);
-  };
-  const handleCloseModal = () => {
-    setEditProfileOpen(false);
-  };
-  const openLogoutModal = () => {
-    setLogOutOpen(true);
-  };
-  const closeLogoutModal = () => {
-    setLogOutOpen(false);
-  };
+  const handleOpenModal = () => setEditProfileOpen(true);
+  const handleCloseModal = () => setEditProfileOpen(false);
+  const openLogoutModal = () => setLogOutOpen(true);
+  const closeLogoutModal = () => setLogOutOpen(false);
   const openChangePassModal = () => {
     handleSendOtp();
     setChangePassOpen(true);
   };
-  const closeChangePassModal = () => {
-    setChangePassOpen(false);
-  };
+  const closeChangePassModal = () => setChangePassOpen(false);
 
   const handleSendOtp = async () => {
     try {
@@ -59,7 +49,7 @@ function Profile() {
   };
 
   return (
-    <div className="h-full px-10 py-4 overflow-y-auto pb-30 no-scrollbar ">
+    <div className="h-full px-4 py-4 overflow-y-auto sm:px-6 md:px-10 pb-30 no-scrollbar">
       <h2
         style={{ fontFamily: "Playfair Display, serif" }}
         className="text-xl font-bold"
@@ -70,13 +60,14 @@ function Profile() {
         Manage your personal information and account settings
       </p>
 
-      <div className="bg-[#1f160f] p-10 px-26 justify-between rounded-xl border border-[#58390dc9] mt-4">
-        <div className="pb-6 border-b border-[#58390dc9] flex gap-6">
-          <div className="w-20 h-20 overflow-hidden rounded-full ">
+      <div className="bg-[#1f160f] p-5 sm:p-8 md:p-10 md:px-16 lg:px-26 rounded-xl border border-[#58390dc9] mt-4">
+        <div className="pb-6 border-b border-[#58390dc9] flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start">
+          <div className="w-20 h-20 overflow-hidden rounded-full shrink-0">
             {currentUser?.profilePic ? (
               <img
                 src={currentUser.profilePic}
                 className="object-cover w-full h-full"
+                alt="profile"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-[#F4A523]">
@@ -86,8 +77,8 @@ function Profile() {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-2">
-            <span className="-mb-2 text-lg font-medium">
+          <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
+            <span className="-mb-1 text-lg font-medium">
               {currentUser?.fullname}
             </span>
             <span className="text-sm text-[#867a5f]">{currentUser?.email}</span>
@@ -97,80 +88,71 @@ function Profile() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 py-6 gap-x-10 gap-y-4">
+        <div className="grid grid-cols-1 gap-4 py-6 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-4">
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase text-[#867a5f] font-medium">
-              Full name
-            </p>
-            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2">
-              <User className="text-[#867a5f]" size={18} />{" "}
-              {currentUser?.fullname}
+            <p className="text-xs uppercase text-[#867a5f] font-medium">Full name</p>
+            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 text-sm">
+              <User className="text-[#867a5f] shrink-0" size={18} />
+              <span className="truncate">{currentUser?.fullname}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase text-[#867a5f] font-medium">
-              email
-            </p>
-            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2">
-              <Mail className="text-[#867a5f]" size={18} /> {currentUser?.email}
+            <p className="text-xs uppercase text-[#867a5f] font-medium">Email</p>
+            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 text-sm">
+              <Mail className="text-[#867a5f] shrink-0" size={18} />
+              <span className="truncate">{currentUser?.email}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase text-[#867a5f] font-medium">
-              phone
-            </p>
-            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2">
-              <Phone className="text-[#867a5f]" size={18} />{" "}
-              {currentUser?.mobile}
+            <p className="text-xs uppercase text-[#867a5f] font-medium">Phone</p>
+            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 text-sm">
+              <Phone className="text-[#867a5f] shrink-0" size={18} />
+              <span className="truncate">{currentUser?.mobile}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase text-[#867a5f] font-medium">
-              role{" "}
-            </p>
-            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2">
-              <Notebook className="text-[#867a5f]" size={18} />
-              {currentUser?.role}
+            <p className="text-xs uppercase text-[#867a5f] font-medium">Role</p>
+            <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 text-sm">
+              <Notebook className="text-[#867a5f] shrink-0" size={18} />
+              <span className="truncate">{currentUser?.role}</span>
             </div>
           </div>
         </div>
+
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase text-[#867a5f] font-medium">
-            Institute{" "}
-          </p>
-          <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2">
-            <Building2 className="text-[#867a5f]" size={18} />{" "}
-            {studentInstitute}
+          <p className="text-xs uppercase text-[#867a5f] font-medium">Institute</p>
+          <div className="border-[#58390dc9] border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 text-sm">
+            <Building2 className="text-[#867a5f] shrink-0" size={18} />
+            <span className="truncate">{studentInstitute}</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-[#1f160f] p-10 px-26 justify-between rounded-xl border border-[#58390dc9] mt-4">
+      <div className="bg-[#1f160f] p-5 sm:p-8 md:p-10 md:px-16 lg:px-26 rounded-xl border border-[#58390dc9] mt-4">
         <p className="text-[#867a5f] mb-4 uppercase text-sm font-medium">
           Account settings
         </p>
         <div className="flex flex-col gap-3">
           <button
-            onClick={() => {
-              handleOpenModal();
-            }}
-            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer"
+            onClick={handleOpenModal}
+            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2.5 text-sm hover:bg-[#211303] transition-all duration-200 cursor-pointer"
           >
-            <Pencil className="text-[#867a5f]" size={18} /> Edit Profile
+            <Pencil className="text-[#867a5f] shrink-0" size={18} /> Edit Profile
           </button>
           <button
             onClick={openChangePassModal}
-            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer"
+            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2.5 text-sm hover:bg-[#211303] transition-all duration-200 cursor-pointer"
           >
-            <Lock className="text-[#867a5f]" size={18} /> Change Password
+            <Lock className="text-[#867a5f] shrink-0" size={18} /> Change Password
           </button>
           <button
             onClick={openLogoutModal}
-            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2 hover:bg-[#211303] transition-all duration-200 cursor-pointer"
+            className="border-[#58390dc9] w-full border bg-[#140d07] rounded-xl px-4 flex gap-4 items-center py-2.5 text-sm hover:bg-[#211303] transition-all duration-200 cursor-pointer"
           >
-            <LogOut className="text-[#867a5f]" size={18} /> Logout
+            <LogOut className="text-[#867a5f] shrink-0" size={18} /> Logout
           </button>
         </div>
+
         {editProfileOpen && (
           <EditProfileModal onClose={handleCloseModal} profile={currentUser} />
         )}

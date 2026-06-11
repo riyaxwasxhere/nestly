@@ -2,12 +2,12 @@ import React from 'react'
 
 const CategoryCard = (props) => {
   return (
-    <div className='h-80  mx-2 flex flex-col justify-between cursor-pointer hover:scale-103 transition-all duration-200 rounded-xl'>
+    <div className='flex flex-col justify-between h-48 mx-1 transition-all duration-200 cursor-pointer sm:h-64 lg:h-80 sm:mx-2 hover:scale-103 rounded-xl'>
       <div 
-        className='h-full w-full bg-center rounded-t-xl bg-cover '
+        className='w-full h-full bg-center bg-cover rounded-t-xl'
         style={{backgroundImage: `url(${props.photo})`}}
       ></div>
-      <p className='text-center font-extralight text-lg' >{props.category}</p>
+      <p className='py-1 text-sm text-center font-extralight sm:text-base lg:text-lg'>{props.category}</p>
     </div>
   )
 }

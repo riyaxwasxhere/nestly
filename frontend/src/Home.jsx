@@ -1,15 +1,15 @@
-import Navbar from './components/layouts/Navbar'
-import PageContainer from './components/layouts/PageContainer'
-import Footer from './components/layouts/Footer'
+import Navbar from "./components/layouts/Navbar";
+import PageContainer from "./components/layouts/PageContainer";
+import Footer from "./components/layouts/Footer";
 
 const Home = () => {
   return (
     <>
-        <Navbar />
-        <PageContainer />
-        <Footer />
+      <Navbar />
+      <PageContainer />
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

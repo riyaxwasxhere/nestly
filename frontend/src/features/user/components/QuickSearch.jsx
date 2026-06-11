@@ -35,22 +35,25 @@ function QuickSearch({
     setRoomType("Room Type");
     setGender("Gender");
   };
+
   return (
-    <div className="p-8 bg-[#261A0A] rounded-2xl m-6 border border-[#5a4626]">
+    <div className="p-4 sm:p-8 bg-[#261A0A] rounded-2xl m-3 sm:m-6 border border-[#5a4626]">
       <div>
-        <h2 className="font-bold text-[#F0E8D8] ">🔍 Quick Search</h2>
+        <h2 className="font-bold text-[#F0E8D8] text-sm sm:text-base">
+          🔍 Quick Search
+        </h2>
       </div>
-      <div className="flex gap-2 mb-3 ">
-        <div className="flex-1 items-center justify-between my-4 bg-[#1A1208] py-2 px-4 rounded-xl border border-[#5a4626] ">
+      <div className="flex flex-col gap-2 mb-3 sm:flex-row">
+        <div className="flex-1 items-center justify-between my-2 sm:my-4 bg-[#1A1208] py-2 px-4 rounded-xl border border-[#5a4626]">
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="text-sm text-[#867a5f] w-full outline-0"
+            className="text-sm text-[#867a5f] w-full outline-0 bg-transparent"
             type="text"
             placeholder="Search by area, college or locality..."
           />
         </div>
-        <button className="bg-[#F5A623] items-center justify-between my-4 cursor-pointer py-2 px-5 rounded-xl text-black text-sm font-semibold hover:shadow-sm hover:shadow-[#F5A623] transition-shadow duration-100">
+        <button className="bg-[#F5A623] items-center justify-center my-2 sm:my-4 cursor-pointer py-2 px-5 rounded-xl text-black text-sm font-semibold hover:shadow-sm hover:shadow-[#F5A623] transition-shadow duration-100 w-full sm:w-auto">
           Search Rooms
         </button>
       </div>
@@ -83,7 +86,7 @@ function QuickSearch({
         )}
       </div>
       {hasFilters && (
-        <p className="mt-3 text-xs text-[#867a5f]">
+        <p className="mt-3 text-xs text-[#867a5f] leading-relaxed">
           Filtering by:{" "}
           {[
             searchQuery && `"${searchQuery}"`,

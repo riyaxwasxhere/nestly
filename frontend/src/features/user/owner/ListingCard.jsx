@@ -7,10 +7,12 @@ function ListingCard({ listing, onClick }) {
     listing.bookingStatus === "open"
   );
   const dispatch = useDispatch();
+
   return (
     <div
-    onClick={onClick}
-    className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300">
+      onClick={onClick}
+      className="bg-[#261A0A] rounded-xl cursor-pointer border border-[#5a462657] hover:-translate-y-1 transition-all duration-300"
+    >
       <div className="relative">
         <div
           className="h-40 bg-center bg-cover rounded-t-xl"
@@ -18,7 +20,7 @@ function ListingCard({ listing, onClick }) {
             backgroundImage: `url('${listing.photos?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=70"}')`
           }}
         >
-          <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f]absolute">
+          <div className="flex items-center justify-between px-3 py-2 text-xs text-[#867a5f] absolute w-full">
             <span className="px-2 bg-[#362704cf] rounded-4xl border border-[#8d8269]">
               {listing.averageRating > 0
                 ? `⭐ ${listing.averageRating} (${listing.totalReviews} reviews)`
@@ -48,7 +50,7 @@ function ListingCard({ listing, onClick }) {
             onClick={(e) => {
               e.stopPropagation();
               dispatch(setOwnerView("Add Listing"));
-              dispatch(setEditListing(listing))
+              dispatch(setEditListing(listing));
             }}
             className="px-2 py-1 font-mono text-xs rounded-full cursor-pointer bg-amber-50/10"
           >
