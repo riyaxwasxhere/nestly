@@ -1,13 +1,15 @@
 import AuthInfoPanel from "../components/AuthInfoPanel";
 import SignInForm from "../components/SignInForm";
+import SignUpForm from "../components/SignUpForm";
 import Logo from "../../../components/ui/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { setView } from "../../../redux/authSlice";
-import SignupForm from "../components/SignUpForm"
 
 function AuthPage() {
-  const activeBtn = "bg-[#F5A623] text-black cursor-pointer text-sm font-semibold px-4 sm:px-6 py-1.5 rounded-4xl";
-  const inactiveBtn = "text-[#e8dbc396] text-sm font-semibold px-4 sm:px-6 py-1.5 rounded-4xl cursor-pointer";
+  const activeBtn =
+    "bg-[#F5A623] text-black cursor-pointer text-sm font-semibold px-4 sm:px-6 py-1.5 rounded-4xl";
+  const inactiveBtn =
+    "text-[#e8dbc396] text-sm font-semibold px-4 sm:px-6 py-1.5 rounded-4xl cursor-pointer";
   const dispatch = useDispatch();
   const activeView = useSelector((state) => state.auth.view);
 
@@ -32,7 +34,7 @@ function AuthPage() {
       </nav>
       <main className="flex min-h-screen md:h-screen md:overflow-hidden">
         <AuthInfoPanel />
-        {activeView === "signin" ? <SignInForm /> : <SignupForm />}
+        {activeView === "signin" ? <SignInForm /> : <SignUpForm />}
       </main>
     </div>
   );
