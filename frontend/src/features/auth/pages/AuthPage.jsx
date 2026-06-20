@@ -3,7 +3,7 @@ import SignInForm from "../components/SignInForm";
 import Logo from "../../../components/ui/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { setView } from "../../../redux/authSlice";
-import SignupForm from "../components/SignUpForm";
+import SignupForm from "../components/SignUpForm"
 
 function AuthPage() {
   const activeBtn = "bg-[#F5A623] text-black cursor-pointer text-sm font-semibold px-4 sm:px-6 py-1.5 rounded-4xl";

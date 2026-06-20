@@ -366,7 +366,7 @@ function SignupForm() {
             <FieldError name="password" />
           </div>
 
-\          <label className="flex items-start gap-2 my-5 cursor-pointer">
+          <label className="flex items-start gap-2 my-5 cursor-pointer">
             <input
               type="checkbox"
               className="w-4 h-4 mt-0.5 accent-amber-500 shrink-0"
