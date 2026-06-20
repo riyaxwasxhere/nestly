@@ -1,6 +1,6 @@
 import AuthInfoPanel from "../components/AuthInfoPanel";
 import SignInForm from "../components/SignInForm";
-import SignUpForm from "../components/SignUpForm";
+import SignupForm from "../components/SignupForm";
 import Logo from "../../../components/ui/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { setView } from "../../../redux/authSlice";
@@ -34,7 +34,7 @@ function AuthPage() {
       </nav>
       <main className="flex min-h-screen md:h-screen md:overflow-hidden">
         <AuthInfoPanel />
-        {activeView === "signin" ? <SignInForm /> : <SignUpForm />}
+        {activeView === "signin" ? <SignInForm /> : <SignupForm />}
       </main>
     </div>
   );

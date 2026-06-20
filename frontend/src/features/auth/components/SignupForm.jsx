@@ -18,7 +18,7 @@ import { auth } from "../../../firebase";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
 
-function SignUpForm() {
+function SignupForm() {
   const [role, setRole] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -413,4 +413,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export default SignupForm;
