@@ -48,7 +48,7 @@ export default function SimpleSlider() {
       </div>
       <div>
         <CategoryCard
-          photo="shttps://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJlZHJvb21zfGVufDB8fDB8fHww"
+          photo="https://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJlZHJvb21zfGVufDB8fDB8fHww"
           category="2 BHK Apartments"
         />
       </div>
