@@ -58,7 +58,7 @@ const PageContainer = () => {
       </section>
 
       {/* top listings */}
-      <section className="bg-amber-950">
+      {/* <section className="bg-amber-950">
         <div className="inset-0 h-full px-4 py-10 text-white sm:px-10 md:px-16 lg:px-20 xl:px-55 bg-black/80">
           <div className="mb-10 text-2xl font-semibold text-center sm:text-3xl lg:text-4xl">
             <h2>Top Listings</h2>
@@ -84,7 +84,7 @@ const PageContainer = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* map view and rooms with budgets */}
       <article className="bg-amber-950 grid grid-cols-1 lg:grid-cols-[3fr_4fr]">
