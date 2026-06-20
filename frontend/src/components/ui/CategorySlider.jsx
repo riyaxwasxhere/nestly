@@ -30,38 +30,32 @@ export default function SimpleSlider() {
     <Slider {...settings}>
       <div>
         <CategoryCard
-          photo="src/assets/images/girls-pg.jpg"
+          photo="https://plus.unsplash.com/premium_photo-1725443314762-f3feff2e7d68?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2lybHMlMjBwZ3xlbnwwfHwwfHx8MA%3D%3D"
           category="PGs for Girls"
         />
       </div>
       <div>
         <CategoryCard
-          photo="src/assets/images/boys-pg.jpg"
+          photo="https://plus.unsplash.com/premium_photo-1717014211334-8ae3b98a5965?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym95cyUyMHBnfGVufDB8fDB8fHww"
           category="PGs for Boys"
         />
       </div>
       <div>
         <CategoryCard
-          photo="src/assets/images/1bhk.jpg"
+          photo="https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVkcm9vbXN8ZW58MHx8MHx8fDA%3D"
           category="1 BHK Apartments"
         />
       </div>
       <div>
         <CategoryCard
-          photo="src/assets/images/2bhk.jpg"
-          category="2 BHK Shared Flats"
+          photo="shttps://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJlZHJvb21zfGVufDB8fDB8fHww"
+          category="2 BHK Apartments"
         />
       </div>
       <div>
         <CategoryCard
-          photo="src/assets/images/3bhk.jpg"
-          category="3 BHK Shared Flats"
-        />
-      </div>
-      <div>
-        <CategoryCard
-          photo="src/assets/images/rentals.jpg"
-          category="Short-Term Rentals"
+          photo="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmVkcm9vbXN8ZW58MHx8MHx8fDA%3D"
+          category="3 BHK Apartments"
         />
       </div>
     </Slider>
