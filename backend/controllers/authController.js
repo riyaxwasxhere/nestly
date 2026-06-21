@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000
     });
 
@@ -60,7 +60,7 @@ export const signin = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000
     });
     res.status(200).json({ message: "Signin successful", user });
@@ -107,7 +107,7 @@ export const googleSignup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000
     });
     res.status(200).json({ message: "Google signup successful", user });
