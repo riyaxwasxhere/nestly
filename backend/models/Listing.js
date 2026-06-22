@@ -72,7 +72,8 @@ const listingSchema = new mongoose.Schema(
         default: "Point"
       },
       coordinates: {
-        type: [Number]
+        type: [Number],
+        default: undefined
       }
     }
   },
